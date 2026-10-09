@@ -82,8 +82,12 @@ def fig_recall_per_fold():
                 color="red", fontsize=7.5, va="top")
         ax.set_xlabel("Walk-forward fold"); ax.set_ylabel("Mean features recovered")
         ax.set_title(ttl)
-    axes[0].legend(fontsize=8, loc="upper left")
-    fig.tight_layout()
+    # one legend below both panels: inside the left panel it ran into the
+    # "switch enters training" label
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="lower center", ncol=len(h), fontsize=8.5,
+               bbox_to_anchor=(0.5, -0.02))
+    fig.tight_layout(rect=(0, 0.07, 1, 1))
     FS.save(fig, "fig_recall_per_fold", "RecallPerFold")
 
 
