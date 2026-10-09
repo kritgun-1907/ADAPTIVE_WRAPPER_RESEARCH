@@ -1,0 +1,22 @@
+# Python 3.12 or 3.13. Install with:  pip install -r requirements.txt
+#
+# Core versions are pinned: the stored results were produced with exactly these,
+# and LightGBM / scikit-learn changes can move the numbers.
+numpy==2.2.6
+pandas==3.0.1
+scipy==1.17.1
+scikit-learn==1.8.0
+lightgbm==4.6.0
+matplotlib==3.10.8
+statsmodels==0.14.6
+joblib==1.5.3
+
+# pandas 3 stores string columns with PyArrow; the dataset pickles cannot be
+# read without it, although pandas does not declare it as a dependency.
+pyarrow==23.0.1
+
+# Downloading the real datasets (sector ETFs, Ken French Data Library).
+# yfinance is left unpinned because it tracks changes to the Yahoo API.
+yfinance
+requests
+certifi

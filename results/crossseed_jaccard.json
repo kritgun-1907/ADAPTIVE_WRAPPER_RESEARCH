@@ -1,0 +1,287 @@
+{
+  "source": "results/step7_ablation_v2.json",
+  "note": "extraction only; fold_selected already stored",
+  "D": 50,
+  "rows": [
+    {
+      "level": "v2_null",
+      "condition": "standard_orpsoc",
+      "cross_seed_jaccard": 0.17287213039922047,
+      "inter_fold_jaccard": 0.1422657628889481,
+      "random_baseline": 0.12196718245991305,
+      "mean_k": 10.870833333333334,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_null",
+      "condition": "apsoll",
+      "cross_seed_jaccard": 0.08755395267248715,
+      "inter_fold_jaccard": 0.06455947491661777,
+      "random_baseline": 0.051248357424441525,
+      "mean_k": 4.875,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_null",
+      "condition": "full_hybrid",
+      "cross_seed_jaccard": 0.11253252980617864,
+      "inter_fold_jaccard": 0.44498480453892963,
+      "random_baseline": 0.07889413351314901,
+      "mean_k": 7.3125,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_null",
+      "condition": "full_hybrid_noimp",
+      "cross_seed_jaccard": 0.1202889196493872,
+      "inter_fold_jaccard": 0.4110414431125624,
+      "random_baseline": 0.08098369516259796,
+      "mean_k": 7.491666666666666,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_white_noise",
+      "condition": "standard_orpsoc",
+      "cross_seed_jaccard": 0.2680584226271494,
+      "inter_fold_jaccard": 0.26370740206117493,
+      "random_baseline": 0.1285620238878962,
+      "mean_k": 11.391666666666667,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_white_noise",
+      "condition": "apsoll",
+      "cross_seed_jaccard": 0.20653952314786225,
+      "inter_fold_jaccard": 0.19752973839108293,
+      "random_baseline": 0.075943692280104,
+      "mean_k": 7.058333333333334,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_white_noise",
+      "condition": "full_hybrid",
+      "cross_seed_jaccard": 0.47061197023083196,
+      "inter_fold_jaccard": 0.871918188409785,
+      "random_baseline": 0.07632971566956678,
+      "mean_k": 7.091666666666667,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_white_noise",
+      "condition": "full_hybrid_noimp",
+      "cross_seed_jaccard": 0.21804402063579373,
+      "inter_fold_jaccard": 0.6708197732383115,
+      "random_baseline": 0.07918521516255228,
+      "mean_k": 7.3375,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_ar1",
+      "condition": "standard_orpsoc",
+      "cross_seed_jaccard": 0.2623727018679378,
+      "inter_fold_jaccard": 0.2524530221845521,
+      "random_baseline": 0.1288274305065613,
+      "mean_k": 11.4125,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_ar1",
+      "condition": "apsoll",
+      "cross_seed_jaccard": 0.20465946802076967,
+      "inter_fold_jaccard": 0.18277046200641955,
+      "random_baseline": 0.07981643120669486,
+      "mean_k": 7.391666666666667,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_ar1",
+      "condition": "full_hybrid",
+      "cross_seed_jaccard": 0.29525138831312814,
+      "inter_fold_jaccard": 0.6432855898336639,
+      "random_baseline": 0.10375275938189846,
+      "mean_k": 9.4,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_ar1",
+      "condition": "full_hybrid_noimp",
+      "cross_seed_jaccard": 0.22301031750503522,
+      "inter_fold_jaccard": 0.5943250074205163,
+      "random_baseline": 0.09885078522045694,
+      "mean_k": 8.995833333333334,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift",
+      "condition": "standard_orpsoc",
+      "cross_seed_jaccard": 0.219188267083887,
+      "inter_fold_jaccard": 0.20446057636238973,
+      "random_baseline": 0.11825552138663685,
+      "mean_k": 10.575,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift",
+      "condition": "apsoll",
+      "cross_seed_jaccard": 0.19956313058163302,
+      "inter_fold_jaccard": 0.18636563832992403,
+      "random_baseline": 0.06842362996928282,
+      "mean_k": 6.404166666666667,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift",
+      "condition": "full_hybrid",
+      "cross_seed_jaccard": 0.2599501751122756,
+      "inter_fold_jaccard": 0.6245601150794073,
+      "random_baseline": 0.09006676658945359,
+      "mean_k": 8.2625,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift",
+      "condition": "full_hybrid_noimp",
+      "cross_seed_jaccard": 0.22165359673933202,
+      "inter_fold_jaccard": 0.6276143711129866,
+      "random_baseline": 0.09349371241115365,
+      "mean_k": 8.55,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch",
+      "condition": "standard_orpsoc",
+      "cross_seed_jaccard": 0.22792708412782295,
+      "inter_fold_jaccard": 0.18882316477360034,
+      "random_baseline": 0.12449046525792999,
+      "mean_k": 11.070833333333333,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch",
+      "condition": "apsoll",
+      "cross_seed_jaccard": 0.18200055216442534,
+      "inter_fold_jaccard": 0.14688609601203587,
+      "random_baseline": 0.07042504794612194,
+      "mean_k": 6.579166666666667,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch",
+      "condition": "full_hybrid",
+      "cross_seed_jaccard": 0.20850729087882958,
+      "inter_fold_jaccard": 0.4118256330783493,
+      "random_baseline": 0.10370200045987585,
+      "mean_k": 9.395833333333334,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch",
+      "condition": "full_hybrid_noimp",
+      "cross_seed_jaccard": 0.18144357994379834,
+      "inter_fold_jaccard": 0.4206934919218826,
+      "random_baseline": 0.10324538015997058,
+      "mean_k": 9.358333333333333,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift@logreg",
+      "condition": "standard_orpsoc",
+      "cross_seed_jaccard": 0.2372677127815237,
+      "inter_fold_jaccard": 0.23250627186130907,
+      "random_baseline": 0.12128574098299383,
+      "mean_k": 10.816666666666666,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift@logreg",
+      "condition": "apsoll",
+      "cross_seed_jaccard": 0.22077215668333422,
+      "inter_fold_jaccard": 0.2263175507188112,
+      "random_baseline": 0.07238605898123325,
+      "mean_k": 6.75,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift@logreg",
+      "condition": "full_hybrid",
+      "cross_seed_jaccard": 0.3043063076457906,
+      "inter_fold_jaccard": 0.7315817310292388,
+      "random_baseline": 0.09394229454396281,
+      "mean_k": 8.5875,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_drift@logreg",
+      "condition": "full_hybrid_noimp",
+      "cross_seed_jaccard": 0.23272377647030673,
+      "inter_fold_jaccard": 0.7133080289380888,
+      "random_baseline": 0.09609061015710632,
+      "mean_k": 8.766666666666667,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch@logreg",
+      "condition": "standard_orpsoc",
+      "cross_seed_jaccard": 0.24921902676525315,
+      "inter_fold_jaccard": 0.24533251175168466,
+      "random_baseline": 0.12491211624091868,
+      "mean_k": 11.104166666666666,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch@logreg",
+      "condition": "apsoll",
+      "cross_seed_jaccard": 0.22446260275597976,
+      "inter_fold_jaccard": 0.21905915513058372,
+      "random_baseline": 0.07748944958247284,
+      "mean_k": 7.191666666666666,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch@logreg",
+      "condition": "full_hybrid",
+      "cross_seed_jaccard": 0.2984603648750253,
+      "inter_fold_jaccard": 0.7259483909991429,
+      "random_baseline": 0.09905206759170215,
+      "mean_k": 9.0125,
+      "n_seeds": 30,
+      "n_folds": 8
+    },
+    {
+      "level": "v2_regime_switch@logreg",
+      "condition": "full_hybrid_noimp",
+      "cross_seed_jaccard": 0.2467942354781657,
+      "inter_fold_jaccard": 0.6926169475551338,
+      "random_baseline": 0.098800476146873,
+      "mean_k": 8.991666666666667,
+      "n_seeds": 30,
+      "n_folds": 8
+    }
+  ]
+}

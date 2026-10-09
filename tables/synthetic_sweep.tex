@@ -1,0 +1,28 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{4pt}
+    \begin{tabular}{lrrrrrrrr}
+    \hline
+    & \multicolumn{2}{c}{$p = 50$} & \multicolumn{2}{c}{$p = 200$} & \multicolumn{2}{c}{$p = 500$} & \multicolumn{2}{c}{$p = 1000$} \\
+    Arm & AR(1) & Regime & AR(1) & Regime & AR(1) & Regime & AR(1) & Regime \\
+    \hline
+    \multicolumn{9}{l}{\textit{LogReg}} \\
+    Sparse PSO & $-0.0194$$^{*}$ & $+0.0135$$^{*}$ & $+0.0610$$^{*}$ & $+0.0428$$^{*}$ & $+0.1457$$^{*}$ & $+0.0651$$^{*}$ & $+0.1706$$^{*}$ & $+0.0420$$^{*}$ \\
+    Sparse OrPSOC & $-0.0187$$^{*}$ & $+0.0132$$^{*}$ & $+0.0814$$^{*}$ & $+0.0491$$^{*}$ & $+0.1491$$^{*}$ & $+0.0604$$^{*}$ & $+0.1722$$^{*}$ & $+0.0456$$^{*}$ \\
+    mRMR & $-0.0350$$^{*}$ & $-0.0584$$^{*}$ & $+0.1061$$^{*}$ & $+0.0302$$^{*}$ & $+0.1830$$^{*}$ & $+0.0728$$^{*}$ & $+0.2189$$^{*}$ & $+0.0624$$^{*}$ \\
+    LASSO & $-0.0057$$^{*}$ & $-0.0558$$^{*}$ & $+0.1272$$^{*}$ & $+0.0465$$^{*}$ & $+0.1754$$^{*}$ & $+0.0639$$^{*}$ & $+0.1889$$^{*}$ & $+0.0306$$^{*}$ \\
+    RFE & $-0.0199$$^{*}$ & $+0.0068$$^{*}$ & $+0.1184$$^{*}$ & $+0.0595$$^{*}$ & $+0.1768$$^{*}$ & $+0.0947$$^{*}$ & $+0.2117$$^{*}$ & $+0.0872$$^{*}$ \\
+    \emph{all-features AUC} & $0.9269$ & $0.7497$ & $0.8252$ & $0.7059$ & $0.7348$ & $0.6477$ & $0.6692$ & $0.6216$ \\
+    \hline
+    \multicolumn{9}{l}{\textit{LightGBM}} \\
+    Sparse PSO & $-0.0777$$^{*}$ & $-0.0468$$^{*}$ & $-0.0743$$^{*}$ & $-0.0265$$^{*}$ & $-0.0321$$^{*}$ & $-0.0182$$^{*}$ & $-0.0337$$^{*}$ & $-0.0345$$^{*}$ \\
+    Sparse OrPSOC & $-0.0852$$^{*}$ & $-0.0526$$^{*}$ & $-0.0664$$^{*}$ & $-0.0365$$^{*}$ & $-0.0381$$^{*}$ & $-0.0088$ & $-0.0327$$^{*}$ & $-0.0164$ \\
+    mRMR & $-0.0510$$^{*}$ & $-0.0748$$^{*}$ & $+0.0162$$^{*}$ & $+0.0184$$^{*}$ & $+0.0200$$^{*}$ & $+0.0263$$^{*}$ & $+0.0091$$^{*}$ & $-0.0096$$^{*}$ \\
+    LASSO & $-0.0260$$^{*}$ & $-0.0489$$^{*}$ & $+0.0346$$^{*}$ & $+0.0214$$^{*}$ & $+0.0242$$^{*}$ & $+0.0201$$^{*}$ & $+0.0120$$^{*}$ & $-0.0172$$^{*}$ \\
+    RFE & $-0.0359$$^{*}$ & $-0.0270$$^{*}$ & $+0.0100$$^{*}$ & $+0.0272$$^{*}$ & $+0.0072$$^{*}$ & $+0.0438$$^{*}$ & $-0.0019$ & $+0.0140$$^{*}$ \\
+    \emph{all-features AUC} & $0.9103$ & $0.7356$ & $0.8868$ & $0.7158$ & $0.8541$ & $0.6848$ & $0.8527$ & $0.6929$ \\
+    \hline
+    \end{tabular}
+    \caption{The synthetic dimensionality sweep, in full. $\Delta$ AUC against the all-features baseline at each width, under the stationary AR(1) level and the regime-switch level, 20 seeds, matched seed-for-seed across levels. $^{*}$ denotes $p < 0.05$, paired per-seed Wilcoxon. Signal count, series length and seed are held fixed at every width; only the number of pure-noise distractors changes. The final row of each panel is the all-features baseline itself, which is not a $\Delta$: the two levels are different generating processes and do not start from the same point, so a larger $\Delta$ against a lower baseline is partly headroom rather than a larger effect, and any AR(1)-versus-regime ratio should be read against these two numbers. Figure~\ref{fig:dim_synth} plots the same data.}
+    \label{tab:syntheticsweep}
+\end{table}

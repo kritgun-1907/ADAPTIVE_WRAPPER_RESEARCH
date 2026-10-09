@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{4pt}
+    \begin{tabular}{lcccccc}
+        \toprule
+        & \multicolumn{3}{c}{$p = 171$ (ind17)} & \multicolumn{3}{c}{$p = 301$ (ind30)} \\
+        \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+        \textbf{Arm} & $k$ & \textbf{Fitness} & $\Delta$\textbf{AUC} & $k$ & \textbf{Fitness} & $\Delta$\textbf{AUC} \\
+        \midrule
+        Sparse PSO & $4.9$ & $0.9478$ & $\mathbf{+0.0251}^{*}$ & $11.1$ & $0.9458$ & $\mathbf{+0.0763}^{*}$ \\
+        Sparse OrPSOC & $4.8$ & $0.9491$ & $\mathbf{+0.0230}^{*}$ & $10.4$ & $0.9470$ & $\mathbf{+0.0811}^{*}$ \\
+        Full Hybrid & $4.3$ & $0.9469$ & $\mathbf{+0.0222}^{*}$ & $8.2$ & $0.9479$ & $\mathbf{+0.0689}^{*}$ \\
+        CG-PSO & $7.8$ & $0.9360$ & $\mathbf{+0.0362}^{*}$ & $17.1$ & $0.9315$ & $\mathbf{+0.0848}^{*}$ \\
+        Taguchi CBPSO & $4.2$ & $\mathbf{0.9529}$ & $\mathbf{+0.0348}^{*}$ & $6.8$ & $\mathbf{0.9557}$ & $\mathbf{+0.0760}^{*}$ \\
+        HPSO-DE & $4.9$ & $0.9486$ & $\mathbf{+0.0216}^{*}$ & $10.5$ & $0.9471$ & $\mathbf{+0.0847}^{*}$ \\
+        BWOA-C & $4.7$ & $0.9466$ & $\mathbf{+0.0336}^{*}$ & $10.0$ & $0.9452$ & $\mathbf{+0.0839}^{*}$ \\
+        \midrule
+        mRMR & $4.9$ & -- & $\mathbf{+0.0511}^{*}$ & $11.0$ & -- & $\mathbf{+0.0945}^{*}$ \\
+        LASSO & $4.8$ & -- & $\mathbf{+0.0602}^{*}$ & $11.0$ & -- & $\mathbf{+0.1210}^{*}$ \\
+        RFE & $4.9$ & -- & $-0.0248^{*}$ & $11.1$ & -- & $\mathbf{+0.0537}^{*}$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Fitness alongside AUC, from a single-machine re-run of the seven swarm arms; the three non-swarm rows are carried from Table~\ref{tab:swarmcomp}. The re-run reproduces that table's $\Delta$AUC to within $0.002$ at every cell with no change of sign or significance, but not seed for seed: gbest is chosen by strict comparison of validation AUC, so subsets that tie to within last-bit floating point resolve differently under a different BLAS and the swarm diverges from there. Individual seeds move by up to $0.041$; the 20-seed mean does not. \emph{Fitness} is the objective every swarm arm actually optimises, $0.5\cdot\mathrm{AUC}_{\mathrm{val}} + 0.5\cdot(1 - k/p)$, recovered from the achieved gbest subset on each fold and averaged over 20 seeds; higher is better. It is reported only for the seven swarm arms, because the three non-swarm methods do not optimise it --- they are handed the budget $k$ that sparse PSO chose on that fold, which is the asymmetry this table exists to make visible. Bold fitness marks the best swarm at that width. $\Delta$AUC is against the all-features baseline under logistic regression, $^{*}$ denotes $p < 0.05$ by paired per-seed Wilcoxon. Fold~1 of the walk-forward sequence has a single-class fitness split at these widths, so the objective is undefined there for every arm alike; those folds are excluded from the fitness mean and included in $\Delta$AUC, where they contribute zero to every arm.}
+    \label{tab:swarmfitness}
+\end{table}

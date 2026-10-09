@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+
+# Datasets are built locally from public sources (see data/README.md)
+data/*
+!data/README.md
+
+# Regenerable outputs
+results/checkpoints/
+plots/*
+!plots/.gitkeep
+figures/*
+!figures/.gitkeep
+*.log
+
+# Manuscript sources are kept outside this repository until publication
+paper/

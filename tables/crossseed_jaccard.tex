@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+    \centering
+    \small
+    \begin{tabular}{lrrrr}
+    \hline
+    Condition & Cross-seed & Inter-fold & Random & Mean $k$ \\
+    \hline
+    Standard OrPSOC & 0.228 & 0.189 & 0.124 & 11.1 \\
+    +APSOLL & 0.182 & 0.147 & 0.070 & 6.6 \\
+    Full Hybrid & 0.209 & 0.412 & 0.104 & 9.4 \\
+    Hybrid (no imp.) & 0.181 & 0.421 & 0.103 & 9.4 \\
+    \hline
+    \end{tabular}
+    \caption{Cross-seed Jaccard at matched folds on v2 Level~4, 30 seeds. \emph{Cross-seed} fixes the fold and varies the random seed: it measures whether the selector is reproducible at all. \emph{Inter-fold} fixes the seed and varies the fold, and is the quantity reported in Figure~\ref{fig:jaccard}; it measures whether the subset tracks the data over time. \emph{Random} is the expected Jaccard for two independent uniform $k$-subsets of $D = 50$, without which neither column is interpretable. The two questions are different and the answers differ.}
+    \label{tab:crossseed}
+\end{table}

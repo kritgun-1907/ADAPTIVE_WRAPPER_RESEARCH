@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{5pt}
+    \begin{tabular}{lrrrr}
+    \hline
+    Arm & $\Delta$ AUC at $C = 1$ & $\Delta$ AUC, tuned & Shift & Mean $k$ \\
+    \hline
+    \multicolumn{5}{l}{\textit{\texttt{ind17}, $p = 171$}} \\
+    all-features AUC & $0.7495$ & $0.8134$ & $+0.0639$ & 171 \\
+    Sparse PSO & $+0.0249$$^{*}$ & $-0.0366$$^{*}$ & $-0.0616$ & 4.9 \\
+    Sparse OrPSOC & $+0.0228$$^{*}$ & $-0.0379$$^{*}$ & $-0.0607$ & 4.8 \\
+    Full Hybrid & $+0.0220$$^{*}$ & $-0.0369$$^{*}$ & $-0.0589$ & 4.3 \\
+    mRMR & $+0.0510$$^{*}$ & $-0.0102$$^{*}$ & $-0.0612$ & 4.9 \\
+    LASSO & $+0.0600$$^{*}$ & $-0.0100$$^{*}$ & $-0.0700$ & 4.8 \\
+    RFE & $-0.0250$$^{*}$ & $-0.0947$$^{*}$ & $-0.0698$ & 4.9 \\
+    \hline
+    \multicolumn{5}{l}{\textit{\texttt{ind30}, $p = 301$}} \\
+    all-features AUC & $0.6919$ & $0.8117$ & $+0.1198$ & 301 \\
+    Sparse PSO & $+0.0761$$^{*}$ & $-0.0321$$^{*}$ & $-0.1082$ & 11.1 \\
+    Sparse OrPSOC & $+0.0809$$^{*}$ & $-0.0259$$^{*}$ & $-0.1068$ & 10.4 \\
+    Full Hybrid & $+0.0687$$^{*}$ & $-0.0441$$^{*}$ & $-0.1128$ & 8.2 \\
+    mRMR & $+0.0941$$^{*}$ & $-0.0200$$^{*}$ & $-0.1141$ & 11.1 \\
+    LASSO & $+0.1196$$^{*}$ & $-0.0064$$^{*}$ & $-0.1260$ & 11.0 \\
+    RFE & $+0.0534$$^{*}$ & $-0.0628$$^{*}$ & $-0.1162$ & 11.1 \\
+    \hline
+    \end{tabular}
+    \caption{Nested cross-validation on the inverse penalty $C$. Every selected subset is scored twice on the same fold: at the default $C = 1$ used throughout the rest of the paper, and at the value chosen by an inner \texttt{TimeSeriesSplit} cross-validation on the training window alone, run \emph{independently} for the all-features baseline and for each arm over $C \in \{0.001, \ldots, 100\}$. 20 seeds, $^{*}$ denotes $p < 0.05$ by paired per-seed Wilcoxon. The selection procedures are unchanged -- the swarm's fitness still evaluates $C = 1$ -- so both columns describe the same subsets and the shift is attributable to the penalty alone. The $C = 1$ column reproduces Table~\ref{tab:dimreal}.}
+    \label{tab:nestedcv}
+\end{table}

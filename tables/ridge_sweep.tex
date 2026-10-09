@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{4pt}
+    \begin{tabular}{lrrrrrr}
+    \hline
+    Arm & $C = 0.001$ & $C = 0.01$ & $C = 0.1$ & $C = 1$ & $C = 10$ & $C = 100$ \\
+    \hline
+    \multicolumn{7}{l}{\textit{ind17, $p = 171$}} \\
+    Sparse PSO & $-0.0324$$^{*}$ & $-0.0220$$^{*}$ & $+0.0116$$^{*}$ & $+0.0249$$^{*}$ & $+0.0385$$^{*}$ & $+0.0477$$^{*}$ \\
+    Sparse OrPSOC & $-0.0289$$^{*}$ & $-0.0153$$^{*}$ & $+0.0087$ & $+0.0228$$^{*}$ & $+0.0374$$^{*}$ & $+0.0481$$^{*}$ \\
+    Full Hybrid & $-0.0272$$^{*}$ & $-0.0111$$^{*}$ & $+0.0064$$^{*}$ & $+0.0220$$^{*}$ & $+0.0351$$^{*}$ & $+0.0451$$^{*}$ \\
+    mRMR & $-0.0190$$^{*}$ & $+0.0058$$^{*}$ & $+0.0351$$^{*}$ & $+0.0510$$^{*}$ & $+0.0637$$^{*}$ & $+0.0732$$^{*}$ \\
+    LASSO & $-0.0174$$^{*}$ & $+0.0115$$^{*}$ & $+0.0422$$^{*}$ & $+0.0600$$^{*}$ & $+0.0727$$^{*}$ & $+0.0828$$^{*}$ \\
+    RFE & $-0.0930$$^{*}$ & $-0.0686$$^{*}$ & $-0.0400$$^{*}$ & $-0.0250$$^{*}$ & $-0.0104$$^{*}$ & $-0.0006$ \\
+    \textit{all-features AUC} & $0.8134$ & $0.7940$ & $0.7664$ & $0.7495$ & $0.7369$ & $0.7269$ \\
+    \hline
+    \multicolumn{7}{l}{\textit{ind30, $p = 301$}} \\
+    Sparse PSO & $-0.0305$$^{*}$ & $+0.0011$ & $+0.0338$$^{*}$ & $+0.0761$$^{*}$ & $+0.1039$$^{*}$ & $+0.1191$$^{*}$ \\
+    Sparse OrPSOC & $-0.0351$$^{*}$ & $-0.0048$ & $+0.0447$$^{*}$ & $+0.0809$$^{*}$ & $+0.1049$$^{*}$ & $+0.1180$$^{*}$ \\
+    Full Hybrid & $-0.0337$$^{*}$ & $-0.0089$ & $+0.0264$$^{*}$ & $+0.0687$$^{*}$ & $+0.0915$$^{*}$ & $+0.1039$$^{*}$ \\
+    mRMR & $-0.0220$$^{*}$ & $+0.0123$$^{*}$ & $+0.0542$$^{*}$ & $+0.0941$$^{*}$ & $+0.1179$$^{*}$ & $+0.1301$$^{*}$ \\
+    LASSO & $-0.0066$$^{*}$ & $+0.0350$$^{*}$ & $+0.0814$$^{*}$ & $+0.1196$$^{*}$ & $+0.1451$$^{*}$ & $+0.1573$$^{*}$ \\
+    RFE & $-0.0656$$^{*}$ & $-0.0287$$^{*}$ & $+0.0138$$^{*}$ & $+0.0534$$^{*}$ & $+0.0766$$^{*}$ & $+0.0897$$^{*}$ \\
+    \textit{all-features AUC} & $0.8117$ & $0.7772$ & $0.7332$ & $0.6919$ & $0.6677$ & $0.6545$ \\
+    \hline
+    \end{tabular}
+    \caption{The ridge sweep. $\Delta$ AUC against the all-features baseline under $L_2$-regularised logistic regression as the inverse penalty $C$ varies over four orders of magnitude, 20 seeds, all arms receiving the sparsity correction of Section~\ref{sec:dimensionality}. $^{*}$ denotes $p < 0.05$, paired per-seed Wilcoxon. $C = 1.0$ is sklearn's default and the value used by every other logistic cell in the paper, so that column reproduces Table~\ref{tab:dimreal}. The final row of each panel is the all-features baseline itself, which is not a $\Delta$: it rises as the penalty strengthens, and at $C = 0.001$ exceeds what any selection arm attains at $C = 1$.}
+    \label{tab:ridgesweep}
+\end{table}

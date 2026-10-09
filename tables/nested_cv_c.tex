@@ -1,0 +1,37 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{5pt}
+    \begin{tabular}{lrrrr}
+    \hline
+    Arm & $\Delta$ AUC at $C = 1$ & $\Delta$ AUC, tuned & Shift & Mean $k$ \\
+    \hline
+    \multicolumn{5}{l}{\textit{\texttt{ind17}, $p = 171$}} \\
+    all-features AUC & $0.7495$ & $0.8234$ & $+0.0739$ & 171 \\
+    Sparse PSO & $+0.0249$$^{*}$ & $-0.0463$$^{*}$ & $-0.0712$ & 4.9 \\
+    Sparse OrPSOC & $+0.0228$$^{*}$ & $-0.0467$$^{*}$ & $-0.0695$ & 4.8 \\
+    Full Hybrid & $+0.0220$$^{*}$ & $-0.0464$$^{*}$ & $-0.0684$ & 4.3 \\
+    CG-PSO & $+0.0360$$^{*}$ & $-0.0349$$^{*}$ & $-0.0710$ & 7.8 \\
+    Taguchi CBPSO & $+0.0346$$^{*}$ & $-0.0369$$^{*}$ & $-0.0715$ & 4.2 \\
+    HPSO-DE & $+0.0214$$^{*}$ & $-0.0491$$^{*}$ & $-0.0704$ & 4.9 \\
+    BWOA-C & $+0.0334$$^{*}$ & $-0.0401$$^{*}$ & $-0.0735$ & 4.7 \\
+    mRMR & $+0.0510$$^{*}$ & $-0.0199$$^{*}$ & $-0.0709$ & 4.9 \\
+    LASSO & $+0.0600$$^{*}$ & $-0.0207$$^{*}$ & $-0.0807$ & 4.8 \\
+    RFE & $-0.0250$$^{*}$ & $-0.1051$$^{*}$ & $-0.0801$ & 4.9 \\
+    \hline
+    \multicolumn{5}{l}{\textit{\texttt{ind30}, $p = 301$}} \\
+    all-features AUC & $0.6919$ & $0.8249$ & $+0.1330$ & 301 \\
+    Sparse PSO & $+0.0761$$^{*}$ & $-0.0442$$^{*}$ & $-0.1203$ & 11.1 \\
+    Sparse OrPSOC & $+0.0809$$^{*}$ & $-0.0391$$^{*}$ & $-0.1200$ & 10.4 \\
+    Full Hybrid & $+0.0687$$^{*}$ & $-0.0572$$^{*}$ & $-0.1259$ & 8.2 \\
+    CG-PSO & $+0.0846$$^{*}$ & $-0.0220$$^{*}$ & $-0.1066$ & 17.1 \\
+    Taguchi CBPSO & $+0.0758$$^{*}$ & $-0.0466$$^{*}$ & $-0.1224$ & 6.8 \\
+    HPSO-DE & $+0.0845$$^{*}$ & $-0.0404$$^{*}$ & $-0.1249$ & 10.5 \\
+    BWOA-C & $+0.0837$$^{*}$ & $-0.0427$$^{*}$ & $-0.1264$ & 10.0 \\
+    mRMR & $+0.0941$$^{*}$ & $-0.0340$$^{*}$ & $-0.1281$ & 11.1 \\
+    LASSO & $+0.1196$$^{*}$ & $-0.0218$$^{*}$ & $-0.1414$ & 11.0 \\
+    RFE & $+0.0534$$^{*}$ & $-0.0786$$^{*}$ & $-0.1320$ & 11.1 \\
+    \hline
+    \end{tabular}
+    \caption{Nested cross-validation on the inverse penalty $C$, scored over the stored subsets of Table~\ref{tab:swarmfitness}. Each subset is scored twice on the same fold: at the default $C = 1$ used throughout the rest of the paper, and at the value chosen by an inner \texttt{TimeSeriesSplit} cross-validation on the training window alone, run \emph{independently} for the all-features baseline and for each arm over $C \in [10^{-6}, 10^{3}]$. 20 seeds, $^{*}$ denotes $p < 0.05$ by paired per-seed Wilcoxon. Because the subsets are taken from storage rather than re-searched, the two columns describe the identical feature sets and the shift is attributable to the penalty alone.}
+    \label{tab:nestedcv}
+\end{table}

@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{5pt}
+    \begin{tabular}{llrrrr}
+    \hline
+    & & \multicolumn{2}{c}{70/30 holdout} & \multicolumn{2}{c}{5-fold CV} \\
+    Classifier & Norm. & Accuracy & AUC & Accuracy & AUC \\
+    \hline
+    SVM (RBF) & min--max & $0.8273$ & $0.9661$ & $0.8487$ & $0.9716$ \\
+     & $z$-score & $0.7955$ & $0.9545$ & $0.8390$ & $0.9690$ \\
+    \hline
+    Na\"ive Bayes & min--max & $0.9909$ & $0.9897$ & $0.9846$ & $0.9907$ \\
+     & $z$-score & $0.9909$ & $0.9897$ & $0.9846$ & $0.9907$ \\
+    \hline
+    AdaBoost & min--max & $0.9318$ & $0.9411$ & $0.9538$ & $0.9925$ \\
+     & $z$-score & $0.9318$ & $0.9411$ & $0.9538$ & $0.9925$ \\
+    \hline
+    Logistic regression & min--max & $0.9727$ & $0.9964$ & $0.9832$ & $0.9973$ \\
+     & $z$-score & $0.9591$ & $0.9982$ & $0.9794$ & $0.9973$ \\
+    \hline
+    \end{tabular}
+    \caption{The golub factorial, all-features baseline only --- no selection is applied anywhere in this table. Four axes are varied; both metrics are reported in every cell. 10 repetitions; the scaler is fitted on the training split throughout (fitting it on the full dataset instead moves every cell by less than one point and is omitted). The published configuration of Bala et al.~\cite{bala2025orpsoc} is the SVM / min--max / 70/30 cell, and it reproduces their reported baseline. The classifier axis moves the baseline by fourteen to seventeen points; no other axis moves it by more than three.}
+    \label{tab:golubfactorial}
+\end{table}

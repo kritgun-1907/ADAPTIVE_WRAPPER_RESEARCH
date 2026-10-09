@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{5pt}
+    \begin{tabular}{lll}
+    \hline
+    Axis & Bala et al.~\cite{bala2025orpsoc} & This paper (Table~\ref{tab:nonfinancial}) \\
+    \hline
+    Source file        & U.\ Pablo de Olavide       & OpenML \texttt{leukemia} \\
+    Shape              & $p = 7129$, $n = 72$       & $p = 7129$, $n = 72$ \\
+    Class split        & not stated                 & 47 / 25 (65.3\% majority) \\
+    Class encoding     & not stated                 & \texttt{factorize}: 0 = ALL (47), 1 = AML (25) \\
+    Value range        & not stated                 & $[-28{,}400,\ +71{,}369]$, raw \\
+    Normalisation      & min--max                   & $z$-score, fitted in-fold \\
+    Missing values     & attribute mean             & none present; step inert \\
+    Protocol           & 70/30 holdout, 10 runs     & stratified 5-fold, 20 seeds \\
+    Classifier         & SVM, Na\"ive Bayes, AdaBoost & LogReg, LightGBM \\
+    Metric             & accuracy                   & AUC \\
+    Swarm budget       & 100 particles $\times$ 100 iters & 20 particles $\times$ 60 iters \\
+    \hline
+    \end{tabular}
+    \caption{The two golub / Leukemia pipelines, axis by axis. Six axes differ.
+    Table~\ref{tab:golubfactorial} varies the four we can control and shows that
+    only one of them --- the classifier --- carries the difference in baseline.
+    The source file is the one axis that cannot be closed from here: the
+    published copy was not obtained, and if it ships floored, ceilinged or
+    log-transformed intensities rather than the raw values above, a residual
+    difference remains.}
+    \label{tab:golubpipelines}
+\end{table}

@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+    \centering
+    \small\setlength{\tabcolsep}{4pt}
+    \begin{tabular}{lrrrrrrrr}
+    \hline
+    Dataset & $p$ & $n$ & Baseline & Sparse PSO & Sparse OrPSOC & mRMR & LASSO & RFE \\
+    \hline
+    \texttt{ind5} & 51 & 20 & 0.7643 & $-0.0213$$^{*}$ & $-0.0158$$^{*}$ & $-0.0083$$^{*}$ & $+0.0233$$^{*}$ & $-0.1117$$^{*}$ \\
+    \texttt{ind10} & 101 & 20 & 0.7577 & $-0.0338$$^{*}$ & $-0.0354$$^{*}$ & $-0.0271$$^{*}$ & $+0.0169$$^{*}$ & $-0.0636$$^{*}$ \\
+    \texttt{ind12} & 121 & 20 & 0.7515 & $-0.0244$$^{*}$ & $-0.0223$$^{*}$ & $-0.0190$$^{*}$ & $-0.0096$$^{*}$ & $-0.0939$$^{*}$ \\
+    \texttt{ind17} & 171 & 20 & 0.7598 & $-0.0375$$^{*}$ & $-0.0587$$^{*}$ & $-0.0198$$^{*}$ & $-0.0199$$^{*}$ & $-0.0941$$^{*}$ \\
+    \texttt{ind30} & 301 & 20 & 0.7346 & $-0.0091$ & $-0.0008$ & $+0.0076$$^{*}$ & $-0.0062$$^{*}$ & $-0.0777$$^{*}$ \\
+    \texttt{ind38} & 361 & 20 & 0.7346 & $+0.0020$ & $-0.0039$ & $-0.0077$$^{*}$ & $+0.0107$$^{*}$ & $-0.0519$$^{*}$ \\
+    \texttt{ind48} & 481 & 20 & 0.7562 & $-0.0124$$^{*}$ & $-0.0139$$^{*}$ & $-0.0231$$^{*}$ & $-0.0222$$^{*}$ & $-0.0443$$^{*}$ \\
+    \texttt{ff49ind} & 491 & 20 & 0.7695 & $-0.0192$$^{*}$ & $-0.0170$$^{*}$ & $-0.0259$$^{*}$ & $-0.0221$$^{*}$ & $-0.0554$$^{*}$ \\
+    \hline
+    \end{tabular}
+    \caption{Real ladder under $k$-nearest neighbours ($k = 15$): $\Delta$ AUC against the all-features baseline, 20 seeds at every width. $^{*}$ denotes $p < 0.05$, paired per-seed Wilcoxon. Compare Table~\ref{tab:knnirrelevance}, where the same estimator and the same selectors reverse sign on data whose added dimensions are irrelevant rather than redundant.}
+    \label{tab:knn}
+\end{table}
