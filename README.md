@@ -1,18 +1,9 @@
-# OrPSOC under regime shift: when does wrapper feature selection pay?
+# From Regime Shift to Redundancy: Boundary Conditions for Swarm-Based Feature Selection
 
-Code, stored results and analysis scripts for the study *From Regime Shift to
-Redundancy: Boundary Conditions for Swarm-Based Feature Selection*.
-
-The study extends Orthogonal Particle Swarm Optimisation with Crossover (OrPSOC)
-to non-stationary data with two adaptation mechanisms: an APSOLL-derived
-stagnation trigger, and a hidden-Markov change-point detector that re-seeds the
-swarm with importance-guided particles. Every selector is evaluated under the
-same walk-forward protocol against an all-features baseline. The data are a
-synthetic benchmark with known signal features (levels L0–L4), financial series
-from 2000–2026 with documented structural breaks, a ladder of Ken French
-industry portfolios of increasing width, and two IID benchmarks. Comparators are
-four enhanced swarms (CG-PSO, Taguchi CBPSO, HPSO-DE, BWOA-C) and three
-non-swarm selectors (mRMR, LASSO, RFE).
+Code and results for a study of when wrapper feature selection beats simply
+using all features. We extend OrPSOC to non-stationary data and evaluate it,
+alongside other swarm and non-swarm selectors, on synthetic, financial and IID
+benchmarks under one walk-forward protocol.
 
 ## Repository layout
 
