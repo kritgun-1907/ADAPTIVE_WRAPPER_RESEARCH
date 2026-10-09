@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import analysis.nested_cv_figure as N            # load(), delta(), mean_curve(), ARMS, ORDER
 
 plt.rcdefaults()                          # undo fig_style: this layout uses the defaults
+plt.rcParams.update({"font.size": 8})   # drawn at print width, so 8 pt stays legible
 
 LABEL = {"sparse_pso": "Sparse PSO", "sparse_orpsoc": "Sparse OrPSOC",
          "full_hybrid": "Full Hybrid", "cgpso": "CG-PSO",
@@ -33,7 +34,7 @@ FIXED, TUNED = "#1f77b4", "#d62728"
 
 def main():
     cell, curve = N.load()
-    fig, axes = plt.subplots(1, 3, figsize=(17.5, 4.0),
+    fig, axes = plt.subplots(1, 3, figsize=(7.2, 3.1),
                              gridspec_kw={"width_ratios": [1, 1, 1],
                                           "wspace": 0.42})
 
@@ -45,16 +46,17 @@ def main():
             ax.annotate("", xy=(t, y), xytext=(f, y),
                         arrowprops=dict(arrowstyle="->", lw=1.0, color="#888888",
                                         shrinkA=3, shrinkB=2))
-            ax.scatter([f], [y], s=40, color=FIXED, zorder=3)
-            ax.scatter([t], [y], s=45, color=TUNED, marker="D", zorder=3)
+            ax.scatter([f], [y], s=18, color=FIXED, zorder=3)
+            ax.scatter([t], [y], s=20, color=TUNED, marker="D", zorder=3)
         ax.axvline(0, color="k", lw=1.0)
         ax.set_yticks(ys)
-        ax.set_yticklabels([LABEL[a] for a in N.ARMS])
+        # the arm names are identical in both panels, so print them once
+        ax.set_yticklabels([LABEL[a] for a in N.ARMS] if ax is axes[0] else [])
         ax.set_ylim(-0.5, len(N.ARMS) - 0.5)
         ax.grid(axis="x", alpha=0.35)
         ax.set_xlabel(r"$\Delta$AUC vs all-features baseline")
         ax.set_title(rf"$p = {p}$")
-        ax.xaxis.set_major_locator(MultipleLocator(0.025))
+        ax.xaxis.set_major_locator(MultipleLocator(0.05))
 
     ax = axes[2]
     for ds, p, ls in [("ind17", 171, "-"), ("ind30", 301, "--")]:
@@ -63,20 +65,22 @@ def main():
         ax.plot(xb, yb, ls, color="#333333", lw=1.5, label=f"all features, $p={p}$")
         ax.plot(xs, ys_, ls, color=TUNED, lw=1.5, label=f"selected subsets, $p={p}$")
     ax.set_xscale("log")
-    ax.set_xticks([10.0 ** e for e in range(-9, 4, 2)])
+    ax.set_ylim(0.615, 0.862)        # room under the curves for the legend
+    ax.set_xticks([10.0 ** e for e in range(-9, 4, 3)])
     ax.axvline(1.0, color="green", ls=":", lw=1.5)
     ax.grid(alpha=0.35)
-    ax.text(0.7, 0.843, "default $C=1$", color="green", ha="right", va="bottom")
+    ax.text(1.6, 0.772, "default\n$C=1$", color="green", ha="left", va="center", fontsize=7)
     ax.set_xlabel(r"inverse penalty $C$ (log scale)")
     ax.set_ylabel("mean inner-CV AUC")
-    ax.set_title("Why: the two sides prefer opposite penalties")
-    ax.legend(loc="lower left", fontsize=9)
+    ax.set_title("Why: the two sides prefer\nopposite penalties")
+    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.0), fontsize=5.4, handlelength=1.4, borderpad=0.3,
+              labelspacing=0.25, framealpha=0.9)
 
     h = [axes[0].scatter([], [], s=40, color=FIXED, label=r"scored at $C=1$"),
          axes[0].scatter([], [], s=45, color=TUNED, marker="D",
                          label=r"$C$ tuned by inner CV")]
     fig.legend(handles=h, loc="upper center", ncol=2, frameon=False,
-               bbox_to_anchor=(0.33, 1.06), columnspacing=3)
+               bbox_to_anchor=(0.36, 1.07), columnspacing=2)
 
     os.makedirs("figures", exist_ok=True); os.makedirs("plots", exist_ok=True)
     out = "figures/fig_nested_cv-updated.pdf"
