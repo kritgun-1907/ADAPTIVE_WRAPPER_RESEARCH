@@ -1,9 +1,11 @@
-# environment-lock.txt -- pip freeze of the environment that produced the
-# later stored results (Amazon EC2 c7a.2xlarge, AMD EPYC 9R14, Ubuntu 24.04.4 LTS,
-# Python 3.12.3, venv ~/orpsoc-venv), captured on 2026-11-12.
+# environment-lock.txt -- pip freeze of ONE of the three environments that
+# produced the stored results: Amazon EC2 c7a.2xlarge, AMD EPYC 9R14, Ubuntu
+# 24.04.4 LTS, Python 3.12.3, venv ~/orpsoc-venv, captured on 2026-11-12.
+# COMPUTE_PROVENANCE.md lists which results come from this machine.
 #
-# The earlier c6i.8xlarge environment (Ubuntu 24.04, Python 3.12.3) was not
-# preserved; of its packages only LightGBM 4.6.0 is on record. The direct
+# The c6i.8xlarge environment (Ubuntu 24.04, Python 3.12.3) was not preserved;
+# of its packages only LightGBM 4.6.0 is on record. Nor was the Apple-silicon
+# environment (macOS arm64, Python 3.13), the third source of results. The direct
 # dependencies below match requirements.txt. yfinance is not listed because it
 # was not installed on this instance; requirements.txt pins it for downloads.
 #

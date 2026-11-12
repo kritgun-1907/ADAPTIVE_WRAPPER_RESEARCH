@@ -203,38 +203,58 @@ powers off; on your own machine that would shut it down.
 
 ## Computing environment
 
-The stored results were computed on Amazon EC2:
+The stored results were not all computed in one environment. They come from
+three platforms; [`COMPUTE_PROVENANCE.md`](COMPUTE_PROVENANCE.md) gives the
+platform, date and evidence for every file in `results/`.
 
-| Instance | vCPU / memory | CPU | OS | Python |
+| Platform | OS | Python | BLAS | Produced |
 |---|---|---|---|---|
-| c6i.8xlarge | 32 vCPU, 64 GiB | Intel (c6i family) | Ubuntu 24.04 LTS (glibc 2.39, from the instance's setup log of 2026-08-06) | 3.12.3 (Ubuntu package 3.12.3-1ubuntu0.15, same log) |
-| c7a.2xlarge | 8 vCPU, 16 GiB | AMD EPYC 9R14 | Ubuntu 24.04.4 LTS | 3.12.3 |
+| Apple silicon laptop (arm64) | macOS | 3.13 | Accelerate | the RFE arm of the real ladder; the penalty study (`nested_cv_stored`, `nested_cv_c`, `ridge_sweep`, `swarm_fitness`); `compass_ceiling`, `adapt_4markets`, `phase3_mediank`; the synthetic k-NN panel of Table 8a |
+| Amazon EC2 c6i.8xlarge, 32 vCPU, Intel | Ubuntu 24.04 (glibc 2.39) | 3.12.3 | not recorded | 2026-08-06 to 08-20: the D = 50 adaptation study (step7 to step9 and its sweeps), the 8-seed synthetic sweep and ladder, and the ladder at ind10 to ind30 (all arms except RFE for LogReg, LightGBM and k-NN; every arm for LinearSVM at ind10 to ind17 and for RandomForest) |
+| Amazon EC2 c7a.2xlarge, 8 vCPU, AMD EPYC 9R14 | Ubuntu 24.04.4 | 3.12.3 | OpenBLAS 0.3.29 (`scipy-openblas`) | 2026-08-25 to 09-17: madelon and golub (`nonfinancial_check`), ind30 LinearSVM, the 20-seed synthetic sweep, the ladder at ind5, ind38, ind48 and ff49ind; in 2026-11, the θ sweep |
 
-Libraries: NumPy 2.2.6, pandas 3.0.1, SciPy 1.17.1, scikit-learn 1.8.0,
-LightGBM 4.6.0 (full direct pins in `requirements.txt`). `environment-lock.txt`
-is the `pip freeze` of the c7a.2xlarge environment. For the c6i.8xlarge only
-LightGBM 4.6.0 is on record; its other installed versions were not logged.
-On the c7a, NumPy and SciPy use OpenBLAS 0.3.29 (the `scipy-openblas` wheel),
-which selects its SkylakeX kernels at run time on that CPU. The c6i's BLAS
-configuration was not recorded.
+All three use the same library pins: NumPy 2.2.6, pandas 3.0.1, SciPy 1.17.1,
+scikit-learn 1.8.0, LightGBM 4.6.0 (`requirements.txt`). Installed versions
+are on record only for the c7a: `environment-lock.txt` is its `pip freeze`,
+taken on 2026-11-12. For the c6i, only LightGBM 4.6.0 was logged. The
+Apple-silicon environment was not recorded beyond what the code itself states
+(macOS arm64, Python 3.13, the pins above). The working copy it ran from no
+longer exists.
+
+The c6i ladder batch of 2026-08-18 to 08-20 ran after the OpenML fetch for
+the non-financial datasets had upgraded scikit-learn to 1.9.0. Only RFE is
+affected, and RFE for LogReg, LightGBM and k-NN at those widths was re-run
+under 1.8.0 (`rfe_repin.py`; Supplementary Section S3). Two sets of RFE
+values were never re-pinned. The LinearSVM RFE at ind10 to ind17 comes from
+that batch and is therefore inferred to be 1.9.0. No checkpoint records a
+library version, and the merged ladder still holds the original units. These
+are the three RFE exceptions behind "37 of 40" (Table S3). The ind5 RFE for
+LogReg, LightGBM and k-NN was computed on the c7a on 2026-09-07/08, at or
+before the date from which the 1.8.0 pin is recorded as verified; its version
+is UNKNOWN.
 
 The c6i.8xlarge ran in a previous AWS account, which was terminated around
-1 September 2026; no logs from that account were retained. The c7a.2xlarge was
-launched on 2026-08-25 in the current account, immediately after an attempt to
-launch a c6i.8xlarge there failed on the vCPU quota (`VcpuLimitExceeded`). Runs
-until about 1 September were made on the c6i.8xlarge and later runs on the
-c7a.2xlarge; the θ sweep ran on the c7a.2xlarge. A per-file mapping from result
-file to instance is not available. The RFE values of the real ladder are
-the exception to "computed on EC2": they were computed on Apple silicon (see
-"Known reproducibility limitation: RFE"). The synthetic k-NN panel of Table 8a
-(2026-09-08) is also consistent with an Apple-silicon run: its p = 50 column
-reproduces exactly there. A four-decimal table match does not identify the
-platform on its own.
+1 September 2026; only the result bundles copied off it survive. The
+c7a.2xlarge was launched on 2026-08-25 in the current account.
 
-One intermediate run did not honour the scikit-learn pin: the OpenML fetch for
-the non-financial datasets upgraded scikit-learn to 1.9.0 before that run
-started. Only RFE was affected, and RFE was re-run under 1.8.0 at 20 seeds for
-every estimator and width (`rfe_repin.py`; Supplementary Section S3).
+Does the platform change the numbers? For the adaptation study and the regime
+detectors, no: re-running units on Apple silicon (the APSOLL
+patience-and-rearm sweep, elite fraction, lag factorial, gated memory, all four
+detector files) gave the same bits as the stored results, and the APSOLL
+sweep is known to come from the c6i. For the real ladder, the penalty study and RFE, yes:
+Apple silicon and x86-64 differ in the fourth decimal or beyond (for example,
+3.8 × 10⁻⁴ per fold on the ind10 LogReg all-features arm, up to 3.7 × 10⁻² on
+LightGBM), while the two x86 instances agree to 5 × 10⁻¹¹. Each of those
+results reproduces exactly only on the platform it was computed on.
+
+The platform could not be determined for `golub_reconcile.json` (Section
+3.7.1, Table S9), `warm_gate.json` or `tier_d_ksweep.json`; the last two are
+not used in the paper. `pareto_knee.json` (Section 3.2.1, Table S10) and the
+four detector files are probably from the c6i, but this is unverified.
+`compass_ceiling.json` is the Apple-silicon version. A c6i rerun differs only
+in its sector-ETF blocks (cause UNKNOWN: platform or raw-data copy). The
+regime-switch numbers the paper reports (ceiling +0.718, criterion +0.201,
+55%) are identical in both versions.
 
 ### Code provenance
 
@@ -358,6 +378,7 @@ selected-feature indices), no data values. Unpack both at the repository root.
 |---|---|---|---|
 | `checkpoints.tgz` | 0.8 MB | `df4eb9cedd0eacb5dcd62f7c3197c25693510c5060f2a84f2b45fe1d4965f388` | `results/checkpoints/`: 1,451 per-unit checkpoints. `tier_d_fullnovelty/29a57cced36f` (919 units), `6e48c607d548` (200), `dbfd16c3be04` (4); `nonfinancial/64e74faa1d9e` (84); `theta_sweep/` (5 generations, 204); `step9/c4e9cd394b46` (40, the generation recorded in `results/step9_real_data.json`) |
 | `theta_sweep_raw.tgz` | 51 KB | `c008f3a80107dcc74af4234398da90463ea9818dbb2d095cfd1bdb9c1ac7ec51` | `results/theta_sweep/fn_theta*_LogReg.json`, the per-unit θ-sweep outputs behind the CSV in `experiments/dimensionality/theta_sweep/results/` |
+| `verification_reruns_rfe.tgz` | 38 KB | `8f3fb1bc7bc9d46f43eead11ba46d29d2c2206f764a7b617693d08ab260729e6` | **Verification reruns, not results of record.** 240 units that recompute the real ladder's RFE arm (ind10–ind30 × LogReg, LightGBM, k-NN × 20 seeds) on an Apple M4, macOS 26.2, Python 3.13.7, NumPy 2.2.6, SciPy 1.17.1, scikit-learn 1.8.0, LightGBM 4.6.0, Accelerate BLAS, on 2026-11-12. Their `rfe` arm is bit-identical to `results/tier_d_ladder_merged.json` in all 240 records. Its `README.txt` lists the environment and per-unit checksums. Never merge them into `results/` |
 
 These are every checkpoint that survives, merged from the c7a.2xlarge and an
 off-instance copy. What they do and do not support:
