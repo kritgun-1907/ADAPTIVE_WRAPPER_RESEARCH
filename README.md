@@ -45,8 +45,8 @@ pip install -r requirements.txt
 ```
 
 `requirements.txt` pins every direct dependency exactly. `environment-lock.txt`
-pins the full transitive set, but it is a reconstruction, not the original
-environment (see the header of that file).
+is the full `pip freeze` of the c7a.2xlarge environment that produced the later
+results (see "Computing environment").
 
 Scripts are run from the repository root (`python pipeline/step7_ablation.py`);
 each one sets up its own import path, so no package install is needed.
@@ -72,7 +72,7 @@ Main text:
 | Table 5b, real datasets at fixed width | `pipeline/step9_real_data.py` | `step9_real_data.json` | — | verified from stored results, no generator |
 | Table 6, real ladder (LogReg, LightGBM) | `experiments/dimensionality/tier_d_fullnovelty.py`, `rfe_repin.py`, merged by `build_ladder.py` | `tier_d_ladder_merged.json` | `analysis/ladder_tables.py` → `ladder_logreg.tex`, `ladder_lightgbm.tex` | regenerates; the Full Hybrid column is verified from stored results, no generator |
 | Table 7, synthetic sweep (LogReg) | `tier_d_curve.py`, `tier_d_fullnovelty.py` | `tier_d_curve.json`, `tier_d_fullnovelty_all-lasso-mrmr-rfe-sparse_orpsoc-sparse_pso.json` | `analysis/ladder_tables.py` → `synthetic_sweep.tex` | regenerates |
-| Table 8a, k-NN on irrelevant dimensions | `tier_d_fullnovelty.py` | checkpoints | `analysis/knn_synthetic_tables.py` → `knn_irrelevance.tex` | needs checkpoints; the committed table matches the paper |
+| Table 8a, k-NN on irrelevant dimensions | `tier_d_fullnovelty.py` | none surviving (see [Zenodo deposit](#zenodo-deposit)) | `analysis/knn_synthetic_tables.py` → `knn_irrelevance.tex` | **not regenerable**: the synthetic k-NN checkpoint units it reads survive in no copy. The committed table matches the paper and is the only record. |
 | Table 8b, k-NN on the real ladder | `tier_d_fullnovelty.py` | `tier_d_ladder_merged.json` | `analysis/ladder_tables.py` → `ladder_knn.tex` | regenerates |
 | Table 9, nested CV on the penalty C | `experiments/penalty/nested_cv_stored.py` (subsets from `swarm_fitness.json`) | `nested_cv_stored.json` | `nested_cv_stored.py --table-only` → `nested_cv_c.tex` | regenerates. A companion re-swarm version (`nested_cv_c.py` → `nested_cv_c.json` → `analysis/nested_cv_tables.py` → `nested_cv_c_reswarm.tex`) is not in the paper. |
 | Table 10, compactness trade-off | `experiments/adaptation/tier_a.py` | `tier_a.json` (`A4`) | — | verified from stored results, no generator |
@@ -91,7 +91,7 @@ Supplementary material:
 | Table S2, k-NN ladder | `tier_d_fullnovelty.py` | `tier_d_ladder_merged.json` | `ladder_tables.py` → `ladder_knn.tex` | regenerates |
 | Table S3, linear SVM ladder | `tier_d_fullnovelty.py` (`FN_MODELS=LinearSVM`) | `tier_d_ladder_merged.json` (also `tier_d_LinearSVM.json`) | — | verified from stored results, no generator |
 | Table S4, synthetic sweep (LightGBM) | as Table 7 | as Table 7 | `ladder_tables.py` → `synthetic_sweep.tex` | regenerates |
-| Table S5, collinearity | `experiments/dimensionality/collinearity.py` | `collinearity.json` | `collinearity.py` → `collinearity.tex` | needs the datasets and checkpoints; the committed table matches the paper |
+| Table S5, collinearity | `experiments/dimensionality/collinearity.py` | `collinearity.json` | `collinearity.py` → `collinearity.tex` | needs the datasets plus `checkpoints.tgz`; not re-run for this release. The committed table matches the paper. |
 | Table S6, ridge sweep | `experiments/penalty/ridge_sweep.py` | `ridge_sweep.json` | `analysis/ridge_tables.py` → `ridge_sweep.tex` | regenerates |
 | Table S7, pre/straddle/post AUC | `tier_a.py`, `step8_results.py` | `tier_a.json`, `step8_statistical_summary.json` | — | verified from stored results, no generator |
 | Table S8, the two golub pipelines | — | — | `tables/golub_pipelines.tex` | written by hand |
@@ -105,7 +105,7 @@ Supplementary material:
 | Fig. S1 | `step7_ablation.py` | `step7_ablation_v2.json` | `analysis/make_supplementary_figures.py` → `figures/MeanAUC.pdf` | regenerates |
 | Fig. S2, detector separation | `detector_supervised.py`, `detector_supervised_real.py` | `detector_supervised.json`, `detector_supervised_real.json` | `make_manuscript_figures.py` → `figures/DetectorSeparation.pdf` | regenerates |
 | Fig. S3 | `step9_real_data.py` | `step9_real_data.json` | `make_supplementary_figures.py` → `figures/Step9_realdata.pdf` | regenerates |
-| Fig. S4 | `step9_real_data.py`, `tier_c.py` | checkpoints | `make_supplementary_figures.py` → `figures/TierC_FamaFrench.pdf` | needs checkpoints; skipped with a message otherwise |
+| Fig. S4 | `step9_real_data.py`, `tier_c.py` | `checkpoints.tgz` (`step9/c4e9cd394b46`) | `make_supplementary_figures.py` → `figures/TierC_FamaFrench.pdf` | regenerates with `checkpoints.tgz` from the Zenodo deposit (otherwise skipped with a message); with it, `tier_c.py` also rebuilds `results/tier_c.json` byte-identical |
 | Fig. S5 | `step7_ablation.py` | `step7_ablation_v2.json` | `make_manuscript_figures.py` → `figures/RecallPerFold.pdf` | regenerates |
 | Fig. S6 | `tier_a.py` | `tier_a.json` | `make_manuscript_figures.py` → `figures/Compactness.pdf` | regenerates |
 | Fig. S7 | as Table 7 | as Table 7 | `make_manuscript_figures.py` → `figures/DimSynthetic.pdf` | regenerates |
@@ -126,16 +126,16 @@ python analysis/golub_tables.py             # Table S9
 python experiments/adaptation/crossseed_jaccard.py            # Table S11
 python analysis/make_manuscript_figures.py  # Figs 3, 5, S2, S5, S6, S7
 python analysis/nested_cv_figure_ref.py     # Fig. 4
-python analysis/make_supplementary_figures.py   # Figs S1, S3, S8, S9 (S4 needs checkpoints)
-python analysis/knn_synthetic_tables.py     # Table 8a, needs checkpoints
+python analysis/make_supplementary_figures.py   # Figs S1, S3, S8, S9 (+ S4 with checkpoints.tgz)
 git status --short tables/ results/         # should print nothing
 ```
 
 On a clean checkout every regenerated table is byte-identical to the committed
 one, so `git status` stays clean. A few of these scripts also rewrite the
 stored JSON they summarise (`results/arm_pairwise.json`,
-`results/crossseed_jaccard.json`), with identical bytes. To also render Table 8a, Table S5 and Fig. S4, extract the
-checkpoint archive from the Zenodo deposit into `results/checkpoints/` first.
+`results/crossseed_jaccard.json`), with identical bytes. To also render Fig. S4, first unpack `checkpoints.tgz` from
+the Zenodo deposit at the repository root (`tar xzf checkpoints.tgz`, which
+creates `results/checkpoints/`).
 
 ### Path B: re-run the experiments (hours to weeks of compute)
 
@@ -195,15 +195,24 @@ The stored results were computed on Amazon EC2:
 
 | Instance | vCPU / memory | CPU | OS | Python |
 |---|---|---|---|---|
-| c6i.8xlarge | 32 vCPU, 64 GiB | Intel (c6i family) | Ubuntu 24.04 LTS (recorded from memory) | 3.12.3 (recorded from memory) |
-| c7a.2xlarge | 8 vCPU, 16 GiB | AMD EPYC 9R14 | Ubuntu 24.04 LTS | 3.12.3 |
+| c6i.8xlarge | 32 vCPU, 64 GiB | Intel (c6i family) | Ubuntu 24.04 LTS (glibc 2.39, from the instance's setup log of 2026-08-06) | 3.12.3 (Ubuntu package 3.12.3-1ubuntu0.15, same log) |
+| c7a.2xlarge | 8 vCPU, 16 GiB | AMD EPYC 9R14 | Ubuntu 24.04.4 LTS | 3.12.3 |
 
 Libraries: NumPy 2.2.6, pandas 3.0.1, SciPy 1.17.1, scikit-learn 1.8.0,
-LightGBM 4.6.0 (full direct pins in `requirements.txt`).
+LightGBM 4.6.0 (full direct pins in `requirements.txt`). `environment-lock.txt`
+is the `pip freeze` of the c7a.2xlarge environment. For the c6i.8xlarge only
+LightGBM 4.6.0 is on record; its other installed versions were not logged.
+On the c7a, NumPy and SciPy use OpenBLAS 0.3.29 (the `scipy-openblas` wheel),
+which selects its SkylakeX kernels at run time on that CPU. The c6i's BLAS
+configuration was not recorded.
 
-Runs from August to 1 September 2026 were made on the c6i.8xlarge and later
-runs on the c7a.2xlarge; the θ sweep ran on the c7a.2xlarge. No per-file
-mapping from result file to instance is available.
+The c6i.8xlarge ran in a previous AWS account, which was terminated around
+1 September 2026; no logs from that account were retained. The c7a.2xlarge was
+launched on 2026-08-25 in the current account, immediately after an attempt to
+launch a c6i.8xlarge there failed on the vCPU quota (`VcpuLimitExceeded`). Runs
+until about 1 September were made on the c6i.8xlarge and later runs on the
+c7a.2xlarge; the θ sweep ran on the c7a.2xlarge. A per-file mapping from result
+file to instance is not available.
 
 One intermediate run did not honour the scikit-learn pin: the OpenML fetch for
 the non-financial datasets upgraded scikit-learn to 1.9.0 before that run
@@ -215,9 +224,33 @@ every estimator and width (`rfe_repin.py`; Supplementary Section S3).
 Each stored result records a SHA-1 of the source files that produced it. Those
 runs used the pre-release file layout (for example `orpsoc_utils.py`, now
 `orpsoc/utils.py`), so the recorded hashes do not match the files in this
-repository. Every number in the paper has been checked against the stored
-results. Whether the restructured code is functionally identical to the code
-that produced them is UNVERIFIED pending a check on the original instance.
+repository. The check below was run on 2026-11-12 to confirm that the release
+code is the code that produced the stored results:
+
+- **Every recorded hash was located.** The engine and pipeline versions behind
+  the D = 50 results are in the public development repository
+  `kritgun-1907/orpsoc_project`: `orpsoc_utils.py` `03133f03…`,
+  `step7_ablation.py` `bdca7591…` and `step9_real_data.py` `39d80d2d…` at commit
+  `a477edd2` (2026-08-07), and `orpsoc_utils.py` `8a019318…` at `712939ce`
+  (2026-08-08). The four adaptation scripts with recorded hashes match the
+  copies kept on the c7a.2xlarge exactly.
+- **The differences to this release were reviewed line by line.** They are
+  import paths, file paths and comments; parameters added with defaults that
+  reproduce the old behaviour (`init_density=None`, `transfer_bias=0.0`,
+  `density=None`, `switch_pair=None`); extra output fields; and a checkpoint
+  file-name shim that applies only on Windows. step7 now passes the true switch
+  pair to the Jaccard split, which is the same pair as the old midpoint for the
+  paper's configuration (8 folds, break at row 500). The one behaviour change
+  is that `elite_frac = 0` now means zero elites rather than one. It affects
+  only the `0.0` arm of `results/elite_frac_sweep.json`, which the paper does
+  not report (the paper fixes the elite fraction at 0.2).
+- **Same machine, two code versions.** On the c7a.2xlarge, this release and the
+  development code kept there produced bit-identical output for every arm,
+  RFE included (ind17, LogReg, θ = 0.5, seeds 0–1).
+- **Release code against the stored paper values.** In the same run, all
+  features, sparse PSO, mRMR and LASSO matched the stored values to within
+  5 × 10⁻¹¹ with identical subset sizes. RFE did not (see the next section).
+  `tests/test_equivalence.py` passes with this release.
 
 ## Known reproducibility limitation: RFE
 
@@ -255,19 +288,45 @@ for each dataset, the file and ticker lists, and each source's terms.
 `python data_prep/verify_data.py` checks every dataset before a run.
 Yahoo Finance and the Ken French library revise past values, so a fresh
 download can differ slightly from the series the stored results used. The
-original download dates were not recorded (UNVERIFIED).
+original downloads date from 2026 (details in `data/README.md`): bond and
+commodity ETF prices on 2026-08-06, the Ken French industry portfolios on
+2026-08-26, madelon and golub on 2026-08-25. The sector-ETF prices predate
+2026-08-06, but their exact download date was not recorded.
 
 ## Zenodo deposit
 
-Besides a snapshot of this repository, the Zenodo deposit holds files too large
-or too derived for git. They contain model outputs only (per-fold AUCs, subset
-sizes, selected-feature indices), no data values:
+Besides a snapshot of this repository, the Zenodo deposit holds files too
+derived for git. They contain model outputs only (per-fold AUCs, subset sizes,
+selected-feature indices), no data values. Unpack both at the repository root.
 
-- `checkpoints.tgz`: the per-unit checkpoints under `results/checkpoints/`,
-  needed for Table 8a, Table S5 and Fig. S4 (size: to be added)
-- `theta_sweep_raw.tgz`: the per-unit θ-sweep JSONs
-  (`results/theta_sweep/fn_theta*_ind17-ind30_LogReg.json`) behind the CSV in
-  `experiments/dimensionality/theta_sweep/results/`
+| File | Size | SHA-256 | Contents |
+|---|---|---|---|
+| `checkpoints.tgz` | 0.8 MB | `7d067ed48eb8a55d41a24afdf31d42722004c99ed8fdf16798dd58554579601e` | `results/checkpoints/`: 1,455 per-unit checkpoints. `tier_d_fullnovelty/29a57cced36f` (919 units), `6e48c607d548` (200), `dbfd16c3be04` (4); `nonfinancial/64e74faa1d9e` (84); `theta_sweep/` (5 generations, 204); `step9/c4e9cd394b46` (40, the generation recorded in `results/step9_real_data.json`) |
+| `theta_sweep_raw.tgz` | 51 KB | `c008f3a80107dcc74af4234398da90463ea9818dbb2d095cfd1bdb9c1ac7ec51` | `results/theta_sweep/fn_theta*_LogReg.json`, the per-unit θ-sweep outputs behind the CSV in `experiments/dimensionality/theta_sweep/results/` |
+
+These are every checkpoint that survives, merged from the c7a.2xlarge and an
+off-instance copy. What they do and do not support:
+
+- **Fig. S4 regenerates** from `step9/c4e9cd394b46`, and
+  `experiments/adaptation/tier_c.py` rebuilds `results/tier_c.json` from it
+  byte-identical.
+- **Table 8a's synthetic panel cannot be regenerated.** Its synthetic (`hd_*`)
+  k-NN runs (2026-09-08, 160 records) were written to
+  `results/tier_d_fullnovelty.json`, which every later run overwrites. Their
+  checkpoint units survive in no copy. The committed
+  `tables/knn_irrelevance.tex`, which matches the paper, is the only record of
+  those numbers. The real-ladder panel comes from
+  `results/tier_d_ladder_merged.json` and regenerates.
+- **The merged ladder cannot be rebuilt in full.** Two sets of units survive in
+  no copy: the RFE-only units that `rfe_repin.py` wrote under scikit-learn
+  1.8.0 for ind10–ind30, and the LightGBM units for ind5 seeds 12–19. Running
+  `build_ladder.py` on this archive gives 578 of the 586 records in the
+  committed `results/tier_d_ladder_merged.json`. Every arm except RFE is
+  identical in all 578. For ind10–ind30 (LogReg, LightGBM, k-NN) the RFE arm
+  falls back to the units written on 2026-08-19/20, before the scikit-learn pin
+  was verified; ind17 LogReg, for example, gives ΔAUC −0.0028 instead of the
+  paper's −0.0248. The committed merged ladder therefore remains the record of
+  the paper's RFE values, and every table renders from it.
 
 ## Protocol notes
 

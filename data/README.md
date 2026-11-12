@@ -45,12 +45,22 @@ deposit. `results/` and the archived checkpoints hold only model outputs
 | `commodities` | same | GLD, SLV, USO, DBC, DBA, UNG, from 2007-01-01 | as above |
 | `madelon` | OpenML, `fetch_openml("madelon", version=1)` | OpenML data id 1485 (originally UCI; NIPS 2003 feature selection challenge) | OpenML licence field: "Public". Cite Guyon, Gunn, Ben-Hur & Dror (2004), *Result analysis of the NIPS 2003 feature selection challenge*. |
 | `golub` | OpenML, `fetch_openml("leukemia", version=1)` | OpenML data id 1104 | OpenML licence field: "Public". Cite Golub et al. (1999), *Science* 286:531–537. |
-| `gisette` | OpenML, `fetch_openml("gisette", version=1)` | UNVERIFIED: OpenML currently lists `gisette` only as version 2 (id 41026), so this call may fail | Not used in the paper. |
+| `gisette` | OpenML, `fetch_openml("gisette", version=1)` | The call resolved when the cache was built (2026-08-25), but OpenML now lists `gisette` only as version 2 (id 41026), so a fresh fetch may fail | Not used in the paper. |
 
 The sources' terms were last checked on 2026-11-12.
 
-When the stored results were downloaded: UNVERIFIED. The dates of the original
-`data/raw_*.pkl` caches on the EC2 instance were not recorded here.
-`yfinance` 1.8.0 (see `requirements.txt`) is the version that resolved when this
-release was prepared. It is not necessarily the version used for the original
-download.
+### When the data behind the stored results were downloaded
+
+| Raw cache | Downloaded | Evidence |
+|---|---|---|
+| `raw_bonds_prices.pkl`, `raw_commodities_prices.pkl` (Yahoo) | 2026-08-06 | Prices end on 2026-08-06, and the caches already existed when the c6i.8xlarge run log of 2026-08-06 19:40 UTC started |
+| `raw_sector_prices.pkl` (Yahoo) | before 2026-08-06; exact date not recorded | Already cached in the same log |
+| `raw_fama_french.pkl` (five factors) | 2026-06-14 (file time) | Modification time of the cache kept on the c7a.2xlarge |
+| `raw_ind{5,10,12,17,30,38,48}.pkl` | 2026-08-26 | Cache file times on the c7a.2xlarge |
+| `raw_madelon.pkl`, `raw_golub.pkl` (OpenML) | 2026-08-25 | Cache file times on the c7a.2xlarge |
+| `ff49ind`, `ff100` | built 2026-09-08 and 2026-09-09; raw caches not kept | Dataset file times on the c7a.2xlarge |
+
+Dates taken from file times are upper bounds, because a copy can postdate the
+download. `yfinance` 1.8.0 (see
+`requirements.txt`) is the version that resolved when this release was
+prepared; the version used for the original Yahoo downloads was not recorded.
