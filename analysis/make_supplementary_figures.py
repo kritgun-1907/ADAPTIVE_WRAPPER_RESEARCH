@@ -187,5 +187,12 @@ def s9_jaccard():
 
 
 if __name__ == "__main__":
+    skipped = []
     for fn in (s1_mean_auc, s3_sector_etf, s4_fama_french, s8_level4, s9_jaccard):
-        fn()
+        try:
+            fn()
+        except Exception as e:   # S4 needs results/checkpoints/, which is not in git
+            print(f"  SKIPPED {fn.__name__}: {type(e).__name__}: {e}")
+            skipped.append(fn.__name__)
+    if skipped:
+        print(f"  skipped {len(skipped)} figure(s): {', '.join(skipped)}")
