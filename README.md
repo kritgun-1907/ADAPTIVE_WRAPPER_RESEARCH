@@ -156,20 +156,29 @@ configuration and of its own source plus `orpsoc/utils.py`. Interrupted runs
 resume, and changed code never reuses stale units. Seeds run in parallel
 (default: cores − 2, at most 6); set `ORPSOC_N_JOBS` to override.
 
-Compute estimates. Wall-clock times were not logged systematically, so these
-come from the notes in the code and are approximate (UNVERIFIED):
+Compute. One dense binary-PSO search (20 particles × 60 iterations, before the
+sparsity correction) was timed per walk-forward fold on one core of the
+c6i.8xlarge. These are upper bounds for the sparsity-corrected searches the
+paper uses:
 
-| Stage | Estimate | Basis |
-|---|---|---|
-| `tests/test_equivalence.py` | ~10 s | measured |
-| Synthetic ablation (`step7`, 30 seeds × 5 levels) | hours on a many-core machine | earlier README |
-| One width of the real ladder, one estimator, all arms, 20 seeds | more than a day of cloud compute per ladder stage | earlier README |
-| One sparse-PSO search (20 particles × 60 iterations) at p = 101–301 | 185–469 s per fold per core | `rfe_repin.py` notes |
-| Re-running RFE for LightGBM on four widths through the full path | ~160 core-hours (`rfe_repin.py` avoids this by reusing the stored budgets) | `rfe_repin.py` notes |
-| θ sweep (5 θ × 2 datasets × 20 seeds, LogReg) | under 4 h on a c7a.2xlarge with 8 workers | it completed within `run_theta.sh`'s default 240-minute shutdown deadline |
+| Data | p | PSO search per fold | RFE | mRMR, LASSO |
+|---|---|---|---|---|
+| synthetic `hd_*` | 50 / 200 / 500 / 1000 / 2000 | 58 / 185 / 469 / 1,011 / 1,914 s | 0.4–14 s | under 1 s |
+| Fama–French factors | 50 | 96 s | 0.8 s | under 0.1 s |
+| `ff49ind` / `ff100` | 491 / 951 | 1,182 / 2,228 s | 8 / 16 s | under 3.1 s |
 
-Extrapolating from the per-fold search cost, the whole set of studies is
-probably on the order of thousands of core-hours (UNVERIFIED).
+Other measured times:
+
+| Stage | Time |
+|---|---|
+| `tests/test_equivalence.py` | about 10 s |
+| θ = 0.5 replication (ind17, LogReg, 2 seeds, five arms) | 0.7 min on the c7a.2xlarge (8 workers); 51 s on an Apple M4 |
+| `rfe_repin.py`, ind17, LogReg, 2 seeds | 19 s on an Apple M4 |
+| θ sweep (5 θ × 2 datasets × 20 seeds, LogReg) | under 4 h on the c7a.2xlarge, within `run_theta.sh`'s 240-minute shutdown deadline |
+
+A full width of the real ladder (one estimator, every arm, 20 seeds) took more
+than a day of cloud compute. Multiplying the per-fold costs out, the whole
+study is in the thousands of core-hours (an extrapolation, not a measurement).
 
 #### The θ sweep (Table S13)
 
@@ -212,7 +221,9 @@ launched on 2026-08-25 in the current account, immediately after an attempt to
 launch a c6i.8xlarge there failed on the vCPU quota (`VcpuLimitExceeded`). Runs
 until about 1 September were made on the c6i.8xlarge and later runs on the
 c7a.2xlarge; the θ sweep ran on the c7a.2xlarge. A per-file mapping from result
-file to instance is not available.
+file to instance is not available. The RFE re-pin (`rfe_repin.py`) is the
+exception to "computed on EC2": it ran on Apple silicon (see "Known
+reproducibility limitation: RFE").
 
 One intermediate run did not honour the scikit-learn pin: the OpenML fetch for
 the non-financial datasets upgraded scikit-learn to 1.9.0 before that run
@@ -264,6 +275,15 @@ differences of up to 0.23 from the stored values. The 20-seed mean moved from
 figures in the paper are one realisation, tied to the environment where they
 were computed. For the same reason RFE is left out of Table S13.
 
+The stored RFE values for the real ladder (written by `rfe_repin.py`) were
+computed on Apple silicon (arm64), not on the EC2 instances. On an Apple M4
+(macOS, NumPy 2.2.6, scikit-learn 1.8.0) the same ind17 check reproduces every
+stored RFE fold bit for bit, and `rfe_repin.py` regenerates the stored ladder
+units exactly (checked for ind17, LogReg, seeds 0–1). On that machine the other
+arms differ from the stored x86
+values by up to 7 × 10⁻⁴. Each arm therefore reproduces exactly on the
+platform it was computed on.
+
 ## Data
 
 No dataset is redistributed here. Every dataset is rebuilt from its public
@@ -288,10 +308,10 @@ for each dataset, the file and ticker lists, and each source's terms.
 `python data_prep/verify_data.py` checks every dataset before a run.
 Yahoo Finance and the Ken French library revise past values, so a fresh
 download can differ slightly from the series the stored results used. The
-original downloads date from 2026 (details in `data/README.md`): bond and
-commodity ETF prices on 2026-08-06, the Ken French industry portfolios on
-2026-08-26, madelon and golub on 2026-08-25. The sector-ETF prices predate
-2026-08-06, but their exact download date was not recorded.
+original downloads date from 2026 (details in `data/README.md`): sector-ETF
+prices and the Fama–French factors on 2026-06-14, bond and commodity ETF prices
+on 2026-08-06, the Ken French industry portfolios on 2026-08-26, and madelon and
+golub on 2026-08-25.
 
 ## Zenodo deposit
 

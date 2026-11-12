@@ -54,8 +54,8 @@ The sources' terms were last checked on 2026-11-12.
 | Raw cache | Downloaded | Evidence |
 |---|---|---|
 | `raw_bonds_prices.pkl`, `raw_commodities_prices.pkl` (Yahoo) | 2026-08-06 | Prices end on 2026-08-06, and the caches already existed when the c6i.8xlarge run log of 2026-08-06 19:40 UTC started |
-| `raw_sector_prices.pkl` (Yahoo) | before 2026-08-06; exact date not recorded | Already cached in the same log |
-| `raw_fama_french.pkl` (five factors) | 2026-06-14 (file time) | Modification time of the cache kept on the c7a.2xlarge |
+| `raw_sector_prices.pkl` (Yahoo) | 2026-06-14 | Prices end on Friday 2026-06-12; cache file time 2026-06-14 |
+| `raw_fama_french.pkl` (five factors) | 2026-06-14 (file time) | Factors end on 2026-04-30 (the library's publication lag); same file time on every copy |
 | `raw_ind{5,10,12,17,30,38,48}.pkl` | 2026-08-26 | Cache file times on the c7a.2xlarge |
 | `raw_madelon.pkl`, `raw_golub.pkl` (OpenML) | 2026-08-25 | Cache file times on the c7a.2xlarge |
 | `ff49ind`, `ff100` | built 2026-09-08 and 2026-09-09; raw caches not kept | Dataset file times on the c7a.2xlarge |
