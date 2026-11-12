@@ -264,8 +264,22 @@ def fig_dim_real():
 
 # ── 5. detector separation ───────────────────────────────────────────────────
 def fig_detector_separation():
+    """Supplementary Fig. S2, computed from the stored detector results."""
     labels = ["Synthetic\n(regime switch)", "Sector ETFs", "Fama–French"]
-    vals = [6.98, 1.01, 0.92]
+    # Synthetic: break-adjacent folds are the first post-break fold and the next
+    # (folds 4-5); ratio of the mean score there to the mean elsewhere, over 20 draws.
+    rows = json.load(open("results/detector_supervised.json"))["rows"]
+    adj, oth = [], []
+    for r in rows:
+        s = np.asarray(r["rs_scores"], float)
+        m = np.zeros(len(s), bool)
+        m[r["post0"]:r["post0"] + 2] = True
+        adj.append(s[m].mean())
+        oth.append(s[~m].mean())
+    real = json.load(open("results/detector_supervised_real.json"))
+    vals = [np.mean(adj) / np.mean(oth)] + [
+        real[ds]["mean_adjacent"] / real[ds]["mean_other"]
+        for ds in ("sector_etf", "fama_french")]
     fig, ax = plt.subplots(figsize=(5.0, 3.6))
     bars = ax.bar(labels, vals, color=["#2ca02c", "#bbbbbb", "#bbbbbb"], width=0.55)
     ax.axhline(1.0, color="red", ls="--", lw=1.4, label="ratio = 1 (no separation)")
