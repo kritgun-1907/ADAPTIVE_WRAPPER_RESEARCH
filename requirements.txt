@@ -16,7 +16,9 @@ joblib==1.5.3
 pyarrow==23.0.1
 
 # Downloading the real datasets (sector ETFs, Ken French Data Library).
-# yfinance is left unpinned because it tracks changes to the Yahoo API.
-yfinance
+# yfinance 1.8.0 is the version that resolved on 2026-11-12, when this release
+# was prepared. It tracks the Yahoo API, so a later download may need a newer
+# version and may return slightly revised prices (see data/README.md).
+yfinance==1.8.0
 requests
 certifi

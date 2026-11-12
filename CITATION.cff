@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below. Zenodo DOI: to be added on release."
+type: software
+title: "Code for: From Regime Shift to Redundancy: Boundary Conditions for Swarm-Based Feature Selection"
+version: v1.0.0
+license: MIT
+repository-code: "https://github.com/kritgun-1907/ADAPTIVE_WRAPPER_RESEARCH"
+authors:
+  - family-names: Singh
+    given-names: Kritgun
+    affiliation: "Department of Electronics and Communication Engineering, Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh 160012, India"
+    orcid: "https://orcid.org/0009-0000-4920-6956"
+    email: kritgunsingh.bt24ece@pec.edu.in
+  - family-names: Mitchell
+    given-names: Lewis
+    affiliation: "School of Mathematical Sciences, Adelaide University, Adelaide, SA 5005, Australia"
+  - family-names: Bala
+    given-names: Indu
+    affiliation: "School of Computer Science and Information Technology, Adelaide University, Adelaide, SA 5005, Australia"
+keywords:
+  - feature selection
+  - particle swarm optimisation
+  - concept drift
+  - wrapper methods
+  - regularisation
+  - high-dimensional data
