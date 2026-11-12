@@ -134,8 +134,7 @@ git status --short tables/ results/         # should print nothing
 On a clean checkout every regenerated table is byte-identical to the committed
 one, so `git status` stays clean. A few of these scripts also rewrite the
 stored JSON they summarise (`results/arm_pairwise.json`,
-`results/crossseed_jaccard.json`, `results/nested_cv_stored.json`), with
-identical bytes. To also render Table 8a, Table S5 and Fig. S4, extract the
+`results/crossseed_jaccard.json`), with identical bytes. To also render Table 8a, Table S5 and Fig. S4, extract the
 checkpoint archive from the Zenodo deposit into `results/checkpoints/` first.
 
 ### Path B: re-run the experiments (hours to weeks of compute)
