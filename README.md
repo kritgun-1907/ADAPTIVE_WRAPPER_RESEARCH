@@ -72,7 +72,7 @@ Main text:
 | Table 5b, real datasets at fixed width | `pipeline/step9_real_data.py` | `step9_real_data.json` | — | verified from stored results, no generator |
 | Table 6, real ladder (LogReg, LightGBM) | `experiments/dimensionality/tier_d_fullnovelty.py`, `rfe_repin.py`, merged by `build_ladder.py` | `tier_d_ladder_merged.json` | `analysis/ladder_tables.py` → `ladder_logreg.tex`, `ladder_lightgbm.tex` | regenerates; the Full Hybrid column is verified from stored results, no generator |
 | Table 7, synthetic sweep (LogReg) | `tier_d_curve.py`, `tier_d_fullnovelty.py` | `tier_d_curve.json`, `tier_d_fullnovelty_all-lasso-mrmr-rfe-sparse_orpsoc-sparse_pso.json` | `analysis/ladder_tables.py` → `synthetic_sweep.tex` | regenerates |
-| Table 8a, k-NN on irrelevant dimensions | `tier_d_fullnovelty.py` | none surviving (see [Zenodo deposit](#zenodo-deposit)) | `analysis/knn_synthetic_tables.py` → `knn_irrelevance.tex` | **not regenerable**: the synthetic k-NN checkpoint units it reads survive in no copy. The committed table matches the paper and is the only record. |
+| Table 8a, k-NN on irrelevant dimensions | `tier_d_fullnovelty.py` | none surviving (see [Zenodo deposit](#zenodo-deposit)) | `analysis/knn_synthetic_tables.py` → `knn_irrelevance.tex` | **not regenerable from stored results**: the synthetic k-NN units it reads survive in no copy. The committed table matches the paper. On Apple silicon a re-run of the p = 50 column reproduced all 10 cells exactly; the other widths were not re-run. |
 | Table 8b, k-NN on the real ladder | `tier_d_fullnovelty.py` | `tier_d_ladder_merged.json` | `analysis/ladder_tables.py` → `ladder_knn.tex` | regenerates |
 | Table 9, nested CV on the penalty C | `experiments/penalty/nested_cv_stored.py` (subsets from `swarm_fitness.json`) | `nested_cv_stored.json` | `nested_cv_stored.py --table-only` → `nested_cv_c.tex` | regenerates. A companion re-swarm version (`nested_cv_c.py` → `nested_cv_c.json` → `analysis/nested_cv_tables.py` → `nested_cv_c_reswarm.tex`) is not in the paper. |
 | Table 10, compactness trade-off | `experiments/adaptation/tier_a.py` | `tier_a.json` (`A4`) | — | verified from stored results, no generator |
@@ -174,6 +174,9 @@ Other measured times:
 | `tests/test_equivalence.py` | about 10 s |
 | θ = 0.5 replication (ind17, LogReg, 2 seeds, five arms) | 0.7 min on the c7a.2xlarge (8 workers); 51 s on an Apple M4 |
 | `rfe_repin.py`, ind17, LogReg, 2 seeds | 19 s on an Apple M4 |
+| `rfe_repin.py`, ind10–ind30 × LogReg/LightGBM/k-NN × 20 seeds (240 units) | 25 min on an Apple M4, 4 workers |
+| Sparse PSO + RFE, 49 ladder units at p = 101–301 | 28 min on an Apple M4, 8 workers |
+| Synthetic k-NN, p = 50, 2 levels × 20 seeds (Table 8a column) | 10 min on an Apple M4, 8 workers |
 | θ sweep (5 θ × 2 datasets × 20 seeds, LogReg) | under 4 h on the c7a.2xlarge, within `run_theta.sh`'s 240-minute shutdown deadline |
 
 A full width of the real ladder (one estimator, every arm, 20 seeds) took more
@@ -221,9 +224,12 @@ launched on 2026-08-25 in the current account, immediately after an attempt to
 launch a c6i.8xlarge there failed on the vCPU quota (`VcpuLimitExceeded`). Runs
 until about 1 September were made on the c6i.8xlarge and later runs on the
 c7a.2xlarge; the θ sweep ran on the c7a.2xlarge. A per-file mapping from result
-file to instance is not available. The RFE re-pin (`rfe_repin.py`) is the
-exception to "computed on EC2": it ran on Apple silicon (see "Known
-reproducibility limitation: RFE").
+file to instance is not available. The RFE values of the real ladder are
+the exception to "computed on EC2": they were computed on Apple silicon (see
+"Known reproducibility limitation: RFE"). The synthetic k-NN panel of Table 8a
+(2026-09-08) is also consistent with an Apple-silicon run: its p = 50 column
+reproduces exactly there. A four-decimal table match does not identify the
+platform on its own.
 
 One intermediate run did not honour the scikit-learn pin: the OpenML fetch for
 the non-financial datasets upgraded scikit-learn to 1.9.0 before that run
@@ -275,14 +281,43 @@ differences of up to 0.23 from the stored values. The 20-seed mean moved from
 figures in the paper are one realisation, tied to the environment where they
 were computed. For the same reason RFE is left out of Table S13.
 
-The stored RFE values for the real ladder (written by `rfe_repin.py`) were
-computed on Apple silicon (arm64), not on the EC2 instances. On an Apple M4
-(macOS, NumPy 2.2.6, scikit-learn 1.8.0) the same ind17 check reproduces every
-stored RFE fold bit for bit, and `rfe_repin.py` regenerates the stored ladder
-units exactly (checked for ind17, LogReg, seeds 0–1). On that machine the other
-arms differ from the stored x86
-values by up to 7 × 10⁻⁴. Each arm therefore reproduces exactly on the
-platform it was computed on.
+The stored RFE values for the real ladder (ind10–ind30, LogReg, LightGBM and
+k-NN) were computed on Apple silicon (arm64), not on the EC2 instances. On an
+Apple M4 (macOS, NumPy 2.2.6, scikit-learn 1.8.0) all 240 of those RFE records
+regenerate bit for bit:
+
+- **191 records** with `rfe_repin.py`, which reuses the stored sparse-PSO
+  budgets;
+- **49 records** by re-running sparse PSO and RFE together on the Mac. In
+  these, the Mac's sparse-PSO search chose a budget that differs from the
+  stored (x86) one in one or two folds, and RFE was matched to the Mac's
+  budget. So RFE's budget is not always exactly the published sparse-PSO
+  budget, which is why RFE's mean subset size can differ slightly from sparse
+  PSO's (11.1 against 11.0 at p = 301 in Table 12).
+
+On the same Mac the other arms differ from the stored x86 values by up to
+7 × 10⁻⁴, while on x86 they reproduce to 5 × 10⁻¹¹. Each arm therefore
+reproduces exactly on the platform it was computed on.
+
+To regenerate the RFE column on Apple silicon, unpack `checkpoints.tgz` and
+make the stored budgets visible under this release's provenance generation
+(its hash differs from the original because file names changed):
+
+```bash
+G=results/checkpoints/tier_d_fullnovelty
+mkdir -p $G/aad95a66b882 && cp -p $G/29a57cced36f/*.pkl $G/aad95a66b882/
+RP_DATASETS=ind10,ind12,ind17,ind30 RP_MODELS=LogReg,LightGBM,kNN \
+  python experiments/dimensionality/rfe_repin.py
+# the 49 records whose Mac budget differs: sparse PSO + RFE, LogReg and k-NN
+FN_ARMS=all,rfe,sparse_pso FN_MODELS=LogReg,kNN FN_DATASETS=ind10,ind12,ind17,ind30 \
+  FN_SEEDS=20 python experiments/dimensionality/tier_d_fullnovelty.py
+```
+
+Compare only the `rfe` arm of these units with `results/tier_d_ladder_merged.json`.
+The second command also writes Mac values for the all-features and sparse-PSO
+arms, and `build_ladder.py` lets the newest unit win per arm. Do not rebuild
+the merged ladder from these units. With the RFE arm taken this way, all 578
+records that the archive supports match the committed merged ladder exactly.
 
 ## Data
 
@@ -321,7 +356,7 @@ selected-feature indices), no data values. Unpack both at the repository root.
 
 | File | Size | SHA-256 | Contents |
 |---|---|---|---|
-| `checkpoints.tgz` | 0.8 MB | `7d067ed48eb8a55d41a24afdf31d42722004c99ed8fdf16798dd58554579601e` | `results/checkpoints/`: 1,455 per-unit checkpoints. `tier_d_fullnovelty/29a57cced36f` (919 units), `6e48c607d548` (200), `dbfd16c3be04` (4); `nonfinancial/64e74faa1d9e` (84); `theta_sweep/` (5 generations, 204); `step9/c4e9cd394b46` (40, the generation recorded in `results/step9_real_data.json`) |
+| `checkpoints.tgz` | 0.8 MB | `df4eb9cedd0eacb5dcd62f7c3197c25693510c5060f2a84f2b45fe1d4965f388` | `results/checkpoints/`: 1,451 per-unit checkpoints. `tier_d_fullnovelty/29a57cced36f` (919 units), `6e48c607d548` (200), `dbfd16c3be04` (4); `nonfinancial/64e74faa1d9e` (84); `theta_sweep/` (5 generations, 204); `step9/c4e9cd394b46` (40, the generation recorded in `results/step9_real_data.json`) |
 | `theta_sweep_raw.tgz` | 51 KB | `c008f3a80107dcc74af4234398da90463ea9818dbb2d095cfd1bdb9c1ac7ec51` | `results/theta_sweep/fn_theta*_LogReg.json`, the per-unit θ-sweep outputs behind the CSV in `experiments/dimensionality/theta_sweep/results/` |
 
 These are every checkpoint that survives, merged from the c7a.2xlarge and an
@@ -330,23 +365,28 @@ off-instance copy. What they do and do not support:
 - **Fig. S4 regenerates** from `step9/c4e9cd394b46`, and
   `experiments/adaptation/tier_c.py` rebuilds `results/tier_c.json` from it
   byte-identical.
-- **Table 8a's synthetic panel cannot be regenerated.** Its synthetic (`hd_*`)
+- **Table 8a's synthetic panel is not in the archive.** Its synthetic (`hd_*`)
   k-NN runs (2026-09-08, 160 records) were written to
-  `results/tier_d_fullnovelty.json`, which every later run overwrites. Their
-  checkpoint units survive in no copy. The committed
-  `tables/knn_irrelevance.tex`, which matches the paper, is the only record of
-  those numbers. The real-ladder panel comes from
+  `results/tier_d_fullnovelty.json`, which every later run overwrites, and
+  their checkpoint units survive in no copy. The committed
+  `tables/knn_irrelevance.tex`, which matches the paper, is the record of those
+  numbers. The panel can be recomputed on Apple silicon: re-running the p = 50
+  column there (`FN_MODELS=kNN FN_DATASETS=hd_ar1_p50,hd_regime_switch_p50
+  FN_ARMS=all,lasso,mrmr,rfe,sparse_orpsoc,sparse_pso FN_SEEDS=20`,
+  10 minutes on an Apple M4) reproduced all 10 of its cells exactly. The p =
+  200, 500 and 1000 columns were not re-run; at the measured per-fold costs
+  they need roughly 5 hours. The real-ladder panel comes from
   `results/tier_d_ladder_merged.json` and regenerates.
-- **The merged ladder cannot be rebuilt in full.** Two sets of units survive in
-  no copy: the RFE-only units that `rfe_repin.py` wrote under scikit-learn
-  1.8.0 for ind10–ind30, and the LightGBM units for ind5 seeds 12–19. Running
-  `build_ladder.py` on this archive gives 578 of the 586 records in the
-  committed `results/tier_d_ladder_merged.json`. Every arm except RFE is
-  identical in all 578. For ind10–ind30 (LogReg, LightGBM, k-NN) the RFE arm
-  falls back to the units written on 2026-08-19/20, before the scikit-learn pin
-  was verified; ind17 LogReg, for example, gives ΔAUC −0.0028 instead of the
-  paper's −0.0248. The committed merged ladder therefore remains the record of
-  the paper's RFE values, and every table renders from it.
+- **The merged ladder rebuilds to 578 of its 586 records.** The LightGBM units
+  for ind5 seeds 12–19 survive in no copy. The RFE-only units that
+  `rfe_repin.py` wrote for ind10–ind30 are not in the archive either, so
+  running `build_ladder.py` on it alone makes the RFE arm fall back to the
+  units written on 2026-08-19/20, before the scikit-learn pin was verified.
+  For example, ind17 LogReg then gives ΔAUC −0.0028 instead of the paper's
+  −0.0248. With the RFE arm regenerated on Apple silicon (see "Known
+  reproducibility limitation: RFE"), every arm of all 578 records matches the
+  committed `results/tier_d_ladder_merged.json` exactly. The committed file
+  remains the record for the other 8, and every table renders from it.
 
 ## Protocol notes
 
