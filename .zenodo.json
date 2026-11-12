@@ -1,0 +1,30 @@
+{
+  "upload_type": "software",
+  "title": "Code for: From Regime Shift to Redundancy: Boundary Conditions for Swarm-Based Feature Selection",
+  "creators": [
+    {
+      "name": "Singh, Kritgun",
+      "affiliation": "Department of Electronics and Communication Engineering, Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh 160012, India",
+      "orcid": "0009-0000-4920-6956"
+    },
+    {
+      "name": "Mitchell, Lewis",
+      "affiliation": "School of Mathematical Sciences, Adelaide University, Adelaide, SA 5005, Australia"
+    },
+    {
+      "name": "Bala, Indu",
+      "affiliation": "School of Computer Science and Information Technology, Adelaide University, Adelaide, SA 5005, Australia"
+    }
+  ],
+  "description": "<p>Code, stored results and analysis scripts for the paper \"From Regime Shift to Redundancy: Boundary Conditions for Swarm-Based Feature Selection\". The code extends Orthogonal Particle Swarm Optimisation with Crossover (OrPSOC) to non-stationary data with self-triggered and detector-triggered adaptation, and evaluates it against an all-features baseline, other swarm selectors (correlation-guided PSO, Taguchi chaotic binary PSO, hybrid PSO/differential evolution, binary whale optimisation) and filter or embedded selectors (mRMR, LASSO, RFE) under one walk-forward cross-validation protocol. It covers a synthetic benchmark with known signal features, financial datasets built from public sources, a dimensionality ladder and synthetic width sweep, a nested cross-validation analysis of the regularisation penalty, regime-change detector comparisons and two non-financial benchmarks. Every table and figure in the paper can be regenerated in minutes from the stored results, and every experiment can be re-run from the public data sources.</p>",
+  "license": "MIT",
+  "version": "v1.0.0",
+  "keywords": [
+    "feature selection",
+    "particle swarm optimisation",
+    "concept drift",
+    "wrapper methods",
+    "regularisation",
+    "high-dimensional data"
+  ]
+}
