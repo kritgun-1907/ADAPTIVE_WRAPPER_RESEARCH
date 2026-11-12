@@ -13,6 +13,7 @@ env/
 # Datasets are built locally from public sources (see data/README.md)
 data/*
 !data/README.md
+!data/CHECKSUMS.sha256
 
 # Regenerable outputs. Checkpoints and the theta-sweep per-unit JSONs are
 # archived in the Zenodo deposit instead of git.

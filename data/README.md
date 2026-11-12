@@ -58,7 +58,27 @@ The sources' terms were last checked on 2026-11-12.
 | `raw_fama_french.pkl` (five factors) | 2026-06-14 (file time) | Factors end on 2026-04-30 (the library's publication lag); same file time on every copy |
 | `raw_ind{5,10,12,17,30,38,48}.pkl` | 2026-08-26 | Cache file times on the c7a.2xlarge |
 | `raw_madelon.pkl`, `raw_golub.pkl` (OpenML) | 2026-08-25 | Cache file times on the c7a.2xlarge |
-| `ff49ind`, `ff100` | built 2026-09-08 and 2026-09-09; raw caches not kept | Dataset file times on the c7a.2xlarge |
+| `raw_ff49ind.pkl`, `raw_ff100.pkl` | 2026-08-10 (file time, laptop copy) | Not on the c7a.2xlarge, which holds only the built `ff49ind.pkl` (2026-09-08) and `ff100.pkl` (2026-09-09); those builds are byte-identical to the laptop's |
+
+### Checksums, and the sources revise history
+
+[`CHECKSUMS.sha256`](CHECKSUMS.sha256) gives the SHA-256, size and file date
+of every raw cache behind the stored results. The canonical copy is the one on
+the c7a.2xlarge. Five raw caches exist only in the laptop copy (Yahoo bond,
+commodity and sector-ETF prices, and the 49-industry and 100-portfolio files),
+and are listed separately. Check a rebuilt cache with
+`cd data && sha256sum -c CHECKSUMS.sha256` (`shasum -a 256 -c` on macOS).
+
+**Both sources revise past values.** The Ken French library and Yahoo Finance
+both change historical data after the fact, so a fresh download is not the
+series the results were computed on. This happened within the project. The
+industry files (`{5,10,12,17,30,38,48}_Industry_Portfolios`) were downloaded
+twice: on 2026-08-26 (the canonical copy) and again on 2026-09-06 into the
+laptop copy. The two differ in about 1% of cells, spread across 2000–2026,
+with identical dates and labels. The second download's hashes are listed in
+`CHECKSUMS.sha256` as superseded, so results computed from it can be
+identified. If a rebuilt cache fails the checksum, the results will not
+reproduce bit for bit from it.
 
 Dates taken from file times are upper bounds, because a copy can postdate the
 download. `yfinance` 1.8.0 (see

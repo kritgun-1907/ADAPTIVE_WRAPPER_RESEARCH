@@ -1,0 +1,53 @@
+# SHA-256 of the raw data files behind the stored results. Verify from the repository root with
+#   cd data && sha256sum -c CHECKSUMS.sha256        (Linux)
+#   cd data && shasum -a 256 -c CHECKSUMS.sha256    (macOS)
+# Comment lines give size in bytes and the file's modification date (UTC), which is the download date.
+# The raw files are not distributed (see data/README.md); these hashes identify the exact copies.
+#
+# CANONICAL COPY: the files on the EC2 c7a.2xlarge (~/orpsoc_research/data), read on 2026-11-12.
+# raw_fama_french.pkl  372238 bytes  2026-06-14T19:42:22Z
+f4d86512fde7d7b509bda9f2d4845e20f1ad4ff6ce64517a552c314dfc1c263e  raw_fama_french.pkl
+# raw_gisette.pkl  280120791 bytes  2026-08-25T12:43:54Z
+7627c7aec58658b08bc19bfa57704a8d855907572161ecfe9f21aac61bc1df68  raw_gisette.pkl
+# raw_golub.pkl  4237901 bytes  2026-08-25T12:44:03Z
+d748ab97a2e666b259b678adad81879c20d3b9b7236f1f827ed284338e6f9441  raw_golub.pkl
+# raw_ind10.pkl  587989 bytes  2026-08-26T08:15:34Z
+7e3054272a72b0124fb11a57effa416e0e21a0ac411672c86293615bc6caf2b3  raw_ind10.pkl
+# raw_ind12.pkl  694712 bytes  2026-08-26T08:15:34Z
+fb6d8cccb5bd35b43adaaae498c0f04dc9f3cfab117655baed881942073f1805  raw_ind12.pkl
+# raw_ind17.pkl  961521 bytes  2026-08-26T08:15:35Z
+8bd0e2e5707c523a4552dfd639971325ef4726e814d07a1fe45933eb77a433ba  raw_ind17.pkl
+# raw_ind30.pkl  1655226 bytes  2026-08-26T08:15:35Z
+f69cf0395a0def4c47d65beb1d178985012b9b9bcb43e5a7200cd2da519fc93b  raw_ind30.pkl
+# raw_ind38.pkl  1975394 bytes  2026-08-26T08:15:36Z
+c090c36385b07b71efbaf76e337b2305d90a0c3d25f3596314311fac02486621  raw_ind38.pkl
+# raw_ind48.pkl  2615725 bytes  2026-08-26T08:15:36Z
+86e98ea6f7d96290350fd0530b787f874745548798216355fdaf70811454bf18  raw_ind48.pkl
+# raw_ind5.pkl  321186 bytes  2026-08-26T08:15:34Z
+6e2d04597092dddafed34413d6310f31e4f3c89b04694c9c8d9e0ba158f6024e  raw_ind5.pkl
+# raw_madelon.pkl  10427550 bytes  2026-08-25T12:33:42Z
+a3224e61b94fcff5e8ce8e1989d01ae790183711b20a1e34562ee6763bfc0922  raw_madelon.pkl
+#
+# Raw files that exist only in the laptop copy (the copy behind the stored market and ff49ind/ff100
+# results; the processed ff49ind.pkl and ff100.pkl are byte-identical in both copies).
+# raw_bonds_prices.pkl  320517 bytes  2026-08-06T01:30:16Z
+7b290832746e336e7c52a1b2f512a7b88d91e948a58f269e3bc5c1a7eb5307fb  raw_bonds_prices.pkl
+# raw_commodities_prices.pkl  273197 bytes  2026-08-06T01:30:18Z
+99d3fe23c60e490bea3d16ec64784345050fb01cea7f8369e719d25134e0e807  raw_commodities_prices.pkl
+# raw_ff100.pkl  5123946 bytes  2026-08-10T22:59:28Z
+8d08a2795de910d97a2912ad7ff0fcce45def77301852da768bd8da0eae1fed0  raw_ff100.pkl
+# raw_ff49ind.pkl  2669091 bytes  2026-08-10T22:59:38Z
+8c8edb8cb7887dd95c5bfe6bb1580a110b1791fc0a713234577a6403755e99f5  raw_ff49ind.pkl
+# raw_sector_prices.pkl  533342 bytes  2026-06-14T08:00:34Z
+93b86d7c57bec7b5e6e353cfc7e4a5ec3d7c589feef38cdd68db1ee961cff6f8  raw_sector_prices.pkl
+#
+# SUPERSEDED, not canonical: a second Ken French industry download in the laptop copy (2026-09-06).
+# It differs from the canonical files in about 1% of cells across 2000-2026 (history revised by the
+# source). Listed only so that results computed from it can be identified; not checkable lines.
+#   7ba7f4fe649ca9277c52f0546638bcc5f1ed33c13cbff858eea7427495358831  raw_ind5.pkl  322242 bytes  2026-09-06T22:53:14Z
+#   8f350f3e6c167a3bfd9842c67c8f3a53ec4dbc2e7757a30848e61e9ecd8d8fed  raw_ind10.pkl  589925 bytes  2026-09-06T22:53:18Z
+#   e4ad9b7e3c027c2525f1d8175f9d0bc2c12682b01fc3faf13349b303687aa9fc  raw_ind12.pkl  697000 bytes  2026-09-06T22:53:20Z
+#   d1e213eed491ca49d43ac9d8dc2026f479841af52669b6ffc938fdb75885cf39  raw_ind17.pkl  964689 bytes  2026-09-06T22:53:22Z
+#   3953d9bb4c62d9dafa6ccf14ec0ed5c32dca1fe79f36af40adc36ffda54eae3c  raw_ind30.pkl  1660682 bytes  2026-09-06T22:53:28Z
+#   9b961088e329e69518466f07414ffd4e502c5744cac28f9d5308428f19b39d9b  raw_ind38.pkl  1981906 bytes  2026-09-06T22:53:32Z
+#   947e3d581e80a5d00fb280b41d7034d4e0d1f43ce29a781e2149ae96c7019687  raw_ind48.pkl  2624349 bytes  2026-09-06T22:53:36Z
