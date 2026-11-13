@@ -114,17 +114,17 @@ def load_ladder():
     Panel (b) and Table~\\ref{tab:knn} (ladder_knn.tex) report the SAME
     quantity: k-NN Delta AUC against the all-features baseline on the real
     ladder. They were computed from two different sources and drifted, and the
-    drift was confined to the `rfe` arm -- the fingerprint of the scikit-learn
-    1.9.0 leak documented in Section 4.
+    drift was confined to the `rfe` arm, the only arm the store holds in more
+    than one version per seed.
 
-    The mechanism: generation 29a57cced36f holds TWO units per (ds, model,
-    seed) for ind5..ind30 -- the original multi-arm run written before the
-    2026-09-08 pin (whose `rfe` is 1.9.0) and an rfe-only re-run written after
-    it (whose `rfe` is the verified 1.8.0). load() below walks os.listdir in
-    filesystem order and lets the last file seen win per seed, so each seed
-    independently resolved to whichever unit happened to be read second. The
-    published panel (b) RFE row was therefore a per-seed BLEND of two library
-    versions -- worse than either one alone, and matching neither.
+    The mechanism: the store can hold several units per (ds, model, seed) that
+    each carry an `rfe` arm -- the original multi-arm run (for the 2026-08 c6i
+    batch, scikit-learn 1.9.0 by inference; no unit records a version) and
+    later rfe-only re-runs (README, "Known reproducibility limitation: RFE").
+    load() below walks os.listdir in filesystem order and lets the last file
+    seen win per seed, so each seed independently resolves to whichever unit
+    happens to be read last. A panel (b) RFE row built that way is a per-seed
+    BLEND of RFE versions and matches none of them.
 
     build_ladder.py already resolves this correctly and writes the result to
     tier_d_ladder_merged.json. Reading that file here makes panel (b) equal to
@@ -205,7 +205,7 @@ def main():
                 drift.append((ds, arm, a[0], b[0]))
     if drift:
         print("  store-vs-merged disagreement on the real ladder "
-              "(merged wins; this is the 1.9.0 leak):")
+              "(merged wins; the store holds several RFE versions per seed):")
         for ds, arm, s, m in drift:
             print(f"    {ds:9} {arm:16} store {s:+.4f}   merged {m:+.4f}"
                   f"   diff {s - m:+.4f}")

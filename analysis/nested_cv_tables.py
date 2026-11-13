@@ -1,4 +1,12 @@
 """
+LEGACY -- not used in the paper. Table 9 comes from
+experiments/penalty/nested_cv_stored.py, which superseded the re-swarm run read
+here (results/nested_cv_c.json: Apple silicon, laptop data copy, not re-run).
+The replication check below compares that run's C = 1 column with the current
+ladder and EXITS 1 on RFE, because the ladder's RFE arm was re-pinned on
+2026-11-12 after this run. That exit is expected; the table it writes is
+unchanged. Kept so the superseded result stays inspectable.
+
 Render the nested-CV-on-C result (item 1) as a LaTeX table plus a console report.
 
 Reads results/nested_cv_c.json, which scores every selected subset TWICE on
@@ -15,7 +23,7 @@ comparison and exits non-zero on a mismatch beyond tolerance rather than
 emitting a table that looks fine.
 
 Run:  python analysis/nested_cv_tables.py
-Writes tables/nested_cv_c.tex
+Writes tables/nested_cv_c_reswarm.tex
 """
 import os
 import sys

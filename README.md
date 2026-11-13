@@ -72,7 +72,7 @@ Main text:
 | Table 5b, real datasets at fixed width | `pipeline/step9_real_data.py` | `step9_real_data.json` | — | verified from stored results, no generator |
 | Table 6, real ladder (LogReg, LightGBM) | `experiments/dimensionality/tier_d_fullnovelty.py`, `rfe_repin.py`, merged by `build_ladder.py` | `tier_d_ladder_merged.json` | `analysis/ladder_tables.py` → `ladder_logreg.tex`, `ladder_lightgbm.tex` | regenerates; the Full Hybrid column is verified from stored results, no generator |
 | Table 7, synthetic sweep (LogReg) | `tier_d_curve.py`, `tier_d_fullnovelty.py` | `tier_d_curve.json`, `tier_d_fullnovelty_all-lasso-mrmr-rfe-sparse_orpsoc-sparse_pso.json` | `analysis/ladder_tables.py` → `synthetic_sweep.tex` | regenerates |
-| Table 8a, k-NN on irrelevant dimensions | `tier_d_fullnovelty.py` | none surviving (see [Zenodo deposit](#zenodo-deposit)) | `analysis/knn_synthetic_tables.py` → `knn_irrelevance.tex` | **not regenerable from stored results**: the synthetic k-NN units it reads survive in no copy. The committed table matches the paper. On Apple silicon a re-run of the p = 50 column reproduced all 10 cells exactly; the other widths were not re-run. |
+| Table 8a, k-NN on irrelevant dimensions | `tier_d_fullnovelty.py` | none in git; units in `knn_synthetic_m4_20261112.tgz` (see [Zenodo deposit](#zenodo-deposit)) | `analysis/knn_synthetic_tables.py` → `knn_irrelevance.tex` | **needs the archive**. The original 2026-09-08 units survive in no copy; the archived units are a full regeneration on an Apple M4 (all four widths, 20 seeds), from which the script rewrites the committed table byte-identical. Without them it blanks panel (a). |
 | Table 8b, k-NN on the real ladder | `tier_d_fullnovelty.py` | `tier_d_ladder_merged.json` | `analysis/ladder_tables.py` → `ladder_knn.tex` | regenerates |
 | Table 9, nested CV on the penalty C | `experiments/penalty/nested_cv_stored.py` (subsets from `swarm_fitness.json`) | `nested_cv_stored.json` | `nested_cv_stored.py --table-only` → `nested_cv_c.tex` | regenerates. A companion re-swarm version (`nested_cv_c.py` → `nested_cv_c.json` → `analysis/nested_cv_tables.py` → `nested_cv_c_reswarm.tex`) is not in the paper; it was computed on Apple silicon with the laptop data copy and was not re-run. `nested_cv_tables.py` still writes its table byte-identical, but its replication check now exits 1, because that run's RFE at C = 1 (−0.0250, +0.0534) no longer matches the re-pinned ladder (−0.0411, +0.0717). |
 | Table 10, compactness trade-off | `experiments/adaptation/tier_a.py` | `tier_a.json` (`A4`) | — | verified from stored results, no generator |
@@ -91,7 +91,7 @@ Supplementary material:
 | Table S2, k-NN ladder | `tier_d_fullnovelty.py` | `tier_d_ladder_merged.json` | `ladder_tables.py` → `ladder_knn.tex` | regenerates |
 | Table S3, linear SVM ladder | `tier_d_fullnovelty.py` (`FN_MODELS=LinearSVM`) | `tier_d_ladder_merged.json` | — | verified from stored results, no generator. `tier_d_LinearSVM.json` (SHA-256 `0884c626b696de77a53cea6c4474f2edced46d33604e1574e9c5ddcab78debcf`) is a corroboration file that no script reads: the c7a copy of 2026-08-26, whose 80 records equal the merged ladder's LinearSVM records exactly, RFE included |
 | Table S4, synthetic sweep (LightGBM) | as Table 7 | as Table 7 | `ladder_tables.py` → `synthetic_sweep.tex` | regenerates |
-| Table S5, collinearity | `experiments/dimensionality/collinearity.py` | `collinearity.json` | `collinearity.py` → `collinearity.tex` | needs the datasets; not re-run for this release. The committed table matches the paper. Its LASSO-gain column is read from the merged ladder: after the ind5 re-run, ind5's gain is 0.024941 against the stored 0.024935, the same at printed precision (+0.0249) |
+| Table S5, collinearity | `experiments/dimensionality/collinearity.py` | `collinearity.json` | `collinearity.py` → `collinearity.tex` | needs the datasets; not re-run for this release. The committed table matches the paper. Its data statistics (effective rank, VIF, condition number) were computed from the laptop data copy: they reproduce exactly from it and differ on the canonical copy by up to 5 × 10⁻³, which does not change the printed table. Its LASSO-gain column is read from the merged ladder: after the ind5 re-run, ind5's gain is 0.024941 against the stored 0.024935, the same at printed precision (+0.0249) |
 | Table S6, ridge sweep | `experiments/penalty/ridge_sweep.py` | `ridge_sweep.json` | `analysis/ridge_tables.py` → `ridge_sweep.tex` | regenerates. Computed on Apple silicon with the laptop data copy and not re-run on the canonical copy; the rest of the penalty study was |
 | Table S7, pre/straddle/post AUC | `tier_a.py`, `step8_results.py` | `tier_a.json`, `step8_statistical_summary.json` | — | verified from stored results, no generator |
 | Table S8, the two golub pipelines | — | — | `tables/golub_pipelines.tex` | written by hand |
@@ -114,13 +114,23 @@ Supplementary material:
 
 ### Path A: regenerate every table and figure from the stored results (about a minute)
 
-No datasets needed.
+No datasets needed. **One command**, with the Zenodo archives downloaded into a
+folder (it unpacks them in the right order, rebuilds the merged ladder and runs
+every renderer below, then lists any file that differs from the committed one;
+about 20 s on an Apple M4):
+
+```bash
+bash scripts/rebuild_from_deposit.sh /path/to/zenodo/files
+```
+
+Without the archives, run the renderers one by one. They use the committed
+merged ladder; Fig. S4 is skipped and Table 8a is left out (both need the
+archives):
 
 ```bash
 python analysis/ladder_tables.py            # Tables 6, 7, 8b, S2, S4
 python analysis/ridge_tables.py             # Table S6
 python experiments/penalty/nested_cv_stored.py --table-only   # Table 9
-python analysis/nested_cv_tables.py         # companion re-swarm table (not in the paper; exits 1, see Table 9 above)
 python analysis/fitness_tables.py           # Table 12 fitness column, Fig. S10
 python analysis/golub_tables.py             # Table S9
 python experiments/adaptation/crossseed_jaccard.py            # Table S11
@@ -133,9 +143,11 @@ git status --short tables/ results/         # should print nothing
 On a clean checkout every regenerated table is byte-identical to the committed
 one, so `git status` stays clean. A few of these scripts also rewrite the
 stored JSON they summarise (`results/arm_pairwise.json`,
-`results/crossseed_jaccard.json`), with identical bytes. To also render Fig. S4, first unpack `checkpoints.tgz` from
-the Zenodo deposit at the repository root (`tar xzf checkpoints.tgz`, which
-creates `results/checkpoints/`).
+`results/crossseed_jaccard.json`), with identical bytes.
+
+`analysis/nested_cv_tables.py` is **legacy**: it renders the superseded
+re-swarm nested CV (not in the paper) and exits 1 by design, because its RFE
+predates the 2026-11-12 re-pin (see Table 9 above). Table S5 needs the datasets.
 
 ### Path B: re-run the experiments (hours to weeks of compute)
 
@@ -176,6 +188,7 @@ Other measured times:
 | `rfe_repin.py`, ind17, LogReg, 2 seeds | 19 s on an Apple M4 |
 | `rfe_repin.py`, ind10–ind30 × LogReg/LightGBM/k-NN × 20 seeds (240 units) | 25 min on an Apple M4, 4 workers |
 | Synthetic k-NN, p = 50, 2 levels × 20 seeds (Table 8a column) | 10 min on an Apple M4, 8 workers |
+| Synthetic k-NN, p = 200, 500, 1000, 2 levels × 20 seeds (rest of Table 8a) | 35 min on an Apple M4, 8 workers |
 | ind5, every arm, LogReg 20 seeds + LightGBM 12 seeds (32 units) | 2 h 12 min on the c7a.2xlarge, 8 workers |
 | `swarm_fitness.py`, ind17 + ind30, 39 of its 40 units | 24 min on the c7a.2xlarge, 8 workers |
 | `nested_cv_stored.py`, 40 units | 5 min on the c7a.2xlarge, 8 workers |
@@ -211,7 +224,7 @@ platform, data copy, date and evidence for every file in `results/`.
 
 | Platform | OS | Python | BLAS | Produced |
 |---|---|---|---|---|
-| Apple silicon laptop (arm64) | macOS | 3.13 | Accelerate | the ridge sweep (Table S6) and the companion re-swarm nested CV (`nested_cv_c`, not in the paper); `compass_ceiling`, `adapt_4markets`, `phase3_mediank`; the synthetic k-NN panel of Table 8a |
+| Apple silicon laptop (arm64) | macOS | 3.13 | Accelerate | the ridge sweep (Table S6) and the companion re-swarm nested CV (`nested_cv_c`, not in the paper); `compass_ceiling`, `adapt_4markets`, `phase3_mediank`; probably the synthetic k-NN panel of Table 8a (its units are lost; the archived recomputation is also Apple silicon) |
 | Amazon EC2 c6i.8xlarge, 32 vCPU, Intel | Ubuntu 24.04 (glibc 2.39) | 3.12.3 | not recorded | 2026-08-06 to 08-20: the D = 50 adaptation study (step7 to step9 and its sweeps), the 8-seed synthetic sweep and ladder, and the ladder at ind10 to ind30 (every arm except RFE for LogReg, LightGBM, k-NN and LinearSVM; every arm for RandomForest) |
 | Amazon EC2 c7a.2xlarge, 8 vCPU, AMD EPYC 9R14 | Ubuntu 24.04.4 | 3.12.3 | OpenBLAS 0.3.29 (`scipy-openblas`) | 2026-08-25 to 09-17: madelon and golub (`nonfinancial_check`), ind30 LinearSVM, the 20-seed synthetic sweep, ind5 k-NN, the ladder at ind38, ind48 and ff49ind. 2026-11: the θ sweep. 2026-11-12/13: the RFE arm of the ladder at ind10 to ind30 (LogReg, LightGBM, k-NN, LinearSVM) and ind5 k-NN; every arm of ind5 LogReg and LightGBM; the penalty study except the ridge sweep (`swarm_fitness`, `nested_cv_stored`: Table 9, Fig. 4, the Table 12 fitness column, Fig. S10) |
 
@@ -243,8 +256,11 @@ The Ken French industry files were downloaded twice: on 2026-08-26 (the
 canonical copy, on the c7a) and on 2026-09-06 (the laptop copy). They differ
 in about 1% of cells ([`data/README.md`](data/README.md);
 `data/CHECKSUMS.sha256` lists both). Every Apple-silicon result on the
-industry data that could be checked used the laptop copy: the ladder RFE arm,
-ind5 LogReg and LightGBM, and the penalty study.
+industry data that could be checked used the laptop copy: the ladder RFE arm
+and the penalty study. The previous ind5 LogReg and LightGBM records also used
+the laptop copy; their platform is UNKNOWN (at ind5 the all-features arm gives
+the same bits on Apple silicon and the c7a, and their units sit in the c7a's
+own checkpoint store).
 
 That data-copy difference is why the RFE arm, the
 ind5 LogReg and LightGBM records and the penalty study were re-run on the c7a
@@ -257,7 +273,8 @@ SVM, RFE, p = 171: +0.0059 to −0.0392\*). The values they replace are kept:
 `nested_cv_stored.json` are in the git history (commit `bb8e31a`).
 
 Still on the laptop copy: the ridge sweep (Table S6), which was not re-run,
-and `nested_cv_c.json` (not in the paper). The market datasets (sector ETFs,
+the data statistics of Table S5 (same at printed precision on either copy), and
+`nested_cv_c.json` (not in the paper). The market datasets (sector ETFs,
 Fama–French factors, bonds, commodities, `v2_regime_switch`) exist only as
 laptop builds; the c7a check reruns of `pareto_knee` (Table S10) and
 `adapt_4markets` ("46 of 48") used them and reproduced the paper's numbers.
@@ -353,7 +370,7 @@ stored sparse-PSO budget of the same record (asserted per record):
   2026-11-12/13, so RFE and the other arms share one data copy.
 
 Before the re-pin, 49 of the 240 main-ladder records had used an RFE budget
-that differed from the stored sparse-PSO budget in one or two folds (those
+that differed from the stored sparse-PSO budget in one to three folds (those
 budgets came from the Apple-silicon swarm on the laptop copy). That is why
 Table 12 showed RFE k = 11.1 against sparse PSO's 11.0 at p = 301. It now
 shows 11.0. The budget mismatch explains little of the change: in the 191
@@ -379,8 +396,8 @@ RP_DATASETS=ind5 RP_MODELS=kNN RP_SEEDS=20 python experiments/dimensionality/rfe
 
 On another platform or data copy, expect differences of the size above.
 `ladder_penalty_c7a_box_20261113.tgz` in the Zenodo deposit holds the units
-of record, so `build_ladder.py` rebuilds the committed ladder without
-re-running anything.
+of record, so the committed ladder rebuilds without re-running anything
+(`scripts/rebuild_from_deposit.sh`).
 
 ## Data
 
@@ -415,44 +432,41 @@ golub on 2026-08-25.
 
 Besides a snapshot of this repository, the Zenodo deposit holds files too
 derived for git. They contain model outputs only (per-fold AUCs, subset sizes,
-selected-feature indices), no data values. Unpack them at the repository root,
-in the order listed.
+selected-feature indices), no data values. `scripts/rebuild_from_deposit.sh`
+unpacks them in the right order and re-renders everything from them.
 
 | File | Size | SHA-256 | Contents |
 |---|---|---|---|
 | `checkpoints.tgz` | 0.8 MB | `df4eb9cedd0eacb5dcd62f7c3197c25693510c5060f2a84f2b45fe1d4965f388` | `results/checkpoints/`: 1,451 per-unit checkpoints. `tier_d_fullnovelty/29a57cced36f` (919 units), `6e48c607d548` (200), `dbfd16c3be04` (4); `nonfinancial/64e74faa1d9e` (84); `theta_sweep/` (5 generations, 204); `step9/c4e9cd394b46` (40, the generation recorded in `results/step9_real_data.json`) |
 | `ladder_penalty_c7a_box_20261113.tgz` | 180 KB | `ab419c9bfac942a8598315c5f9d3f20446cf8a25a442306b2e2ad34888dedee5` | The units computed on the c7a.2xlarge with the canonical data copy on 2026-11-12/13. `tier_d_fullnovelty/aad95a66b882`: 340 RFE-only units (`rfe_repin.py`) and 40 eleven-arm ind5 LogReg and LightGBM units, each with a `meta` block (platform, versions, data hash). `swarm_fitness/85802cd6be89`: the 40 units behind `results/swarm_fitness.json`. Its `README.txt` gives the environment and data hashes; `UNITS.sha256` lists every unit |
+| `knn_synthetic_m4_20261112.tgz` | 80 KB | `b4ecf9d836429a7a5886b53dcde0fbb15f1477f55dc0982e247c2ab988b4f387` | Table 8a panel (a): 160 k-NN units (`tier_d_fullnovelty/aad95a66b882/hd_*`, hd_ar1 and hd_regime_switch at p = 50, 200, 500, 1000 × 20 seeds), recomputed on 2026-11-12 on an Apple M4 (macOS 26.2, Python 3.13.7, NumPy 2.2.6, SciPy 1.17.1, scikit-learn 1.8.0, Accelerate BLAS) because the 2026-09-08 originals survive in no copy. From them `analysis/knn_synthetic_tables.py` rewrites the committed `tables/knn_irrelevance.tex` byte-identical. Whether x86 gives the same bits was not tested. Its `README.txt` gives the synthetic data hashes; `UNITS.sha256` lists every unit |
 | `theta_sweep_raw.tgz` | 51 KB | `c008f3a80107dcc74af4234398da90463ea9818dbb2d095cfd1bdb9c1ac7ec51` | `results/theta_sweep/fn_theta*_LogReg.json`, the per-unit θ-sweep outputs behind the CSV in `experiments/dimensionality/theta_sweep/results/` |
 | `verification_reruns_rfe.tgz` | 38 KB | `8f3fb1bc7bc9d46f43eead11ba46d29d2c2206f764a7b617693d08ab260729e6` | **Verification reruns, not results of record.** 240 units that recompute the main ladder's previously published RFE arm (ind10–ind30 × LogReg, LightGBM, k-NN × 20 seeds) on an Apple M4 (macOS 26.2, Python 3.13.7, NumPy 2.2.6, SciPy 1.17.1, scikit-learn 1.8.0, LightGBM 4.6.0, Accelerate BLAS) with the laptop data copy, on 2026-11-12. Their `rfe` arm is bit-identical to `rfe_superseded` in `results/tier_d_ladder_rfe_superseded.json` in all 240 records, which is how that version was traced to Apple silicon and the laptop copy. Its `README.txt` lists the environment and per-unit checksums. Never merge them into `results/` |
 
 What they do and do not support:
 
-- **The merged ladder rebuilds exactly.** Unpack `checkpoints.tgz`, copy
+- **The merged ladder rebuilds byte-identical** with
+  `scripts/rebuild_from_deposit.sh`. By hand: unpack `checkpoints.tgz`, copy
   `tier_d_fullnovelty/29a57cced36f/*.pkl` into
   `tier_d_fullnovelty/aad95a66b882/` (keeping file times, `cp -p`), unpack
   `ladder_penalty_c7a_box_20261113.tgz` over it and run
-  `python experiments/dimensionality/build_ladder.py`. The result equals the
-  committed `results/tier_d_ladder_merged.json` in all 586 records; only the
-  record order can differ, because it follows unit file times.
+  `python experiments/dimensionality/build_ladder.py`. **Do not skip the
+  copy:** without it `build_ladder.py` picks generation `29a57cced36f` (it holds
+  more units) and returns 578 records with the superseded RFE arm.
   `build_ladder.py` lets the newest unit win per arm, so the 2026-11 units
   must be newer than the copied ones; `tar` keeps their archived times.
 - **Fig. S4 regenerates** from `step9/c4e9cd394b46`, and
   `experiments/adaptation/tier_c.py` rebuilds `results/tier_c.json` from it
   byte-identical.
-- **Table 8a's synthetic panel is not in the archive.** Its synthetic (`hd_*`)
-  k-NN runs (2026-09-08, 160 records, Apple silicon) were written to
+- **Table 8a's synthetic panel regenerates from a recomputation, not the
+  originals.** Its 2026-09-08 synthetic (`hd_*`) k-NN runs were written to
   `results/tier_d_fullnovelty.json`, which every later run overwrites, and
-  their checkpoint units survive in no copy. The committed
-  `tables/knn_irrelevance.tex`, which matches the paper, is the record of those
-  numbers. The panel can be recomputed on Apple silicon: re-running the p = 50
-  column there (`FN_MODELS=kNN FN_DATASETS=hd_ar1_p50,hd_regime_switch_p50
-  FN_ARMS=all,lasso,mrmr,rfe,sparse_orpsoc,sparse_pso FN_SEEDS=20`,
-  10 minutes on an Apple M4) reproduced all 10 of its cells exactly. The p =
-  200, 500 and 1000 columns were not re-run; at the measured per-fold costs
-  they need roughly 5 hours. The real-ladder panel (b) comes from
-  `results/tier_d_ladder_merged.json`; `analysis/knn_synthetic_tables.py`
-  renders it, but without the synthetic units it also blanks panel (a), so
-  its output is not the committed file.
+  their units survive in no copy. All four widths were recomputed on an Apple
+  M4 on 2026-11-12 (`FN_MODELS=kNN FN_DATASETS=hd_ar1_p50,…,hd_regime_switch_p1000
+  FN_ARMS=all,lasso,mrmr,rfe,sparse_orpsoc,sparse_pso FN_SEEDS=20`, about 45
+  minutes in all) and reproduce every one of its 40 cells exactly; those units
+  are `knn_synthetic_m4_20261112.tgz`. The real-ladder panel (b) comes from
+  `results/tier_d_ladder_merged.json`.
 
 ## Protocol notes
 

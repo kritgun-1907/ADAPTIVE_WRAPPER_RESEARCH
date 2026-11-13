@@ -85,7 +85,7 @@ is UNKNOWN.
 | `ar1_control.json` | C7A (extracted from the file above) | extraction first committed 2026-10-09 | rebuilt byte-identical on VER | rebuilt identical |
 | `tier_d_ksweep.json` (p = 2000; not used in the paper) | UNKNOWN (consistent with MAC) | UNKNOWN; first committed 2026-10-09 | not in any EC2 bundle or on the c7a | all-features baseline identical (inconclusive) |
 | `tier_d_fullnovelty_all-cgpso-sparse_pso.json` (1 record, LinearSVM `hd_ar1_p200` s0) | C6I (by date only) | 2026-08-18 | its unit in `29a57cced36f` is dated 2026-08-18, before the c7a existed | not rerun |
-| Table 8a, panel (a): synthetic k-NN (exists only as `tables/knn_irrelevance.tex`) | MAC | 2026-09-08 (per the archive notes) | No units survive. Attributed to Apple silicon because its p = 50 column reproduces all 10 cells exactly on VER | p = 50 reproduced; p = 200, 500, 1000 not re-run |
+| Table 8a, panel (a): synthetic k-NN (`tables/knn_irrelevance.tex`) | MAC (UNVERIFIED) | 2026-09-08 (per the archive notes) | The original units survive in no copy. All four widths reproduce all 40 cells exactly on VER (2026-11-12); those VER units are `knn_synthetic_m4_20261112.tgz`. Whether x86 gives the same bits was not tested, so the reproduction does not by itself establish the platform | all 40 cells identical |
 
 ### Dimensionality study: real ladder
 
@@ -99,8 +99,8 @@ within the main ladder, by arm. "Canonical copy" is the Ken French download of
 | LinearSVM ind10, ind12, ind17 (60) | C6I, 2026-08-18 to 08-20 | C7A, 2026-11-12, as above | On VER the all-features arm differs (ind10 7.3e-4). The RFE they replace came from the c6i batch, inferred to be scikit-learn 1.9.0 (stage 3 of that batch ran after the stage-1 OpenML fetch that Supplementary Section S3 identifies as the upgrade; no unit records a version) |
 | LinearSVM ind30 (20) | C7A, 2026-08-26 | C7A; the 1.8.0 re-pin is bit-identical to it in 20 of 20 records | c7a log `05_linearsvm_20260825T211528`; on VER the all-features arm differs (3.9e-3) |
 | RandomForest ind10 (20), ind12 (6) | C6I, 2026-08-19/20 | C6I (same unit), inferred 1.9.0, not re-pinned | On VER the all-features arm differs (ind10 3.2e-3). Not used in the paper |
-| ind5 k-NN (20) | C7A, 2026-09-08 | C7A; the 1.8.0 re-pin is bit-identical in 20 of 20 records | On VER the all-features arm differs, so x86 |
-| ind5 LogReg, LightGBM (40) | C7A, 2026-11-12/13, canonical copy, every arm in one unit | (same unit) | LightGBM seeds 12–19 from 2026-11-12, the rest 2026-11-12/13; each unit carries a `meta` block. The values they replace were computed on Apple silicon with the laptop copy, every arm: their RFE reproduces bit for bit on VER with that copy (LogReg 20 of 20, LightGBM seeds 0–11 12 of 12), and the LightGBM all-features arm, which is platform-insensitive, reproduces only from that copy |
+| ind5 k-NN (20) | C7A by store location and date (UNVERIFIED), 2026-09-08, canonical copy | C7A; the 1.8.0 re-pin is bit-identical in 20 of 20 records | The all-features arm (seed 0) reproduces exactly on VER from the canonical copy, so these records used it. At ind5 that arm gives the same bits on both platforms, so it does not identify the platform |
+| ind5 LogReg, LightGBM (40) | C7A, 2026-11-12/13, canonical copy, every arm in one unit | (same unit) | LightGBM seeds 12–19 from 2026-11-12, the rest 2026-11-12/13; each unit carries a `meta` block. The values they replace were computed from the laptop copy, every arm: on VER their all-features arm (seed 0) reproduces exactly from that copy and not from the canonical one, and their RFE reproduces bit for bit with it (LogReg 20 of 20, LightGBM seeds 0–11 12 of 12). Their platform is UNKNOWN: at ind5 the all-features arm gives the same bits on VER and the c7a, ind5 RFE was never compared across platforms on one data copy, and the units are in the c7a's own store (`checkpoints_box_only`), dated 2026-09-07/08 |
 | ind38, ind48, ff49ind × LogReg, LightGBM, k-NN (180) | C7A, 2026-09-08 to 09-17, every arm including RFE | (same unit) | Units postdate the c6i and are on the c7a. On VER the all-features arm differs for ind38 LogReg and LightGBM, ind48 LogReg, k-NN and LightGBM, and ff49ind LogReg, so x86; it is identical (inconclusive) for ff49ind k-NN and LightGBM. scikit-learn 1.8.0 according to the code's pin record (verified from 2026-09-08); the c7a re-pin of ind38 LogReg seeds 0–1 is bit-identical |
 
 The units of every C7A 2026-11 entry are in `ladder_penalty_c7a_box_20261113.tgz`.
@@ -117,7 +117,7 @@ Other ladder files:
 | `tier_d_fullnovelty_8seed_20260814.json` | C6I | 2026-08-13/14 | Byte-identical to the c6i `ec2_results` `tier_d_fullnovelty.json`; on VER the all-features arm differs (3.8e-4). Not used in the paper: only `build_ladder.py` reads it, as a fallback, and the merged ladder takes 0 of its 586 records from it |
 | `tier_d_LinearSVM.json` (SHA-256 `0884c626b696de77a53cea6c4474f2edced46d33604e1574e9c5ddcab78debcf`) | C6I (ind10–ind17) and C7A (ind30) | 2026-08-18 to 08-26 | Byte-identical to the c7a bundle `orpsoc_out.tgz` (2026-08-26). A corroboration file: no script reads it, and all 80 records equal the merged ladder's LinearSVM records in every arm, RFE included. Its ind10–ind17 RFE therefore already held the values that the 2026-11-12 re-pin produced, while the ladder held different ones |
 | `arm_pairwise.json` | derived from the merged ladder | first committed 2026-10-09 | rebuilt byte-identical from the current ladder |
-| `collinearity.json` | derived (data statistics and the ladder's LogReg LASSO gain) | first committed 2026-10-09 | rebuilt byte-identical on VER before the ind5 re-run. Not rebuilt since (it needs the datasets): from the current ladder the ind5 gain is 0.0249406 against the stored 0.0249355, the same in `collinearity.tex` (+0.0249) |
+| `collinearity.json` | derived (data statistics and the ladder's LogReg LASSO gain) | first committed 2026-10-09 | rebuilt byte-identical on VER before the ind5 re-run. Its data statistics come from the laptop copy: they reproduce exactly from it (ind5, ind10, ind12, ind17, ind38) and differ on the canonical copy by up to 5e-3, which does not change the table. Not rebuilt since (it needs the datasets): from the current ladder the ind5 gain is 0.0249406 against the stored 0.0249355, the same in `collinearity.tex` (+0.0249) |
 | `nonfinancial_check.json` (madelon, golub) | C7A | 2026-08-25 | Byte-identical to the c7a bundle `orpsoc_out.tgz`; units `nonfinancial/64e74faa1d9e` dated 2026-08-25; c7a log `03_nonfinancial_20260825T150719`. The c7a 1.8.0 re-pin of its RFE and its mRMR and LASSO anchors is bit-identical in 80 of 80 records |
 | `golub_reconcile.json` (Section 3.7.1, Table S9) | UNKNOWN (consistent with MAC) | UNKNOWN; first committed 2026-10-09 | Not in any EC2 bundle or on the c7a. VER: all 8 stage-A LogReg rows bit-identical (inconclusive) |
 | θ sweep (`experiments/dimensionality/theta_sweep/results/theta_sweep_per_seed.csv`, Table S13) | C7A | 2026-11 (run recorded in its README as 2026-11-12) | package README; raw outputs and units come from the c7a |
@@ -169,7 +169,8 @@ Other ladder files:
   LogReg). For ff49ind's raw data see `data/README.md`.
 - Apple silicon produced: the penalty study's ridge sweep (Table S6) and
   `nested_cv_c` (not in the paper), `compass_ceiling`, `adapt_4markets`,
-  `phase3_mediank`, and the synthetic k-NN panel of Table 8a.
+  `phase3_mediank`, and probably the synthetic k-NN panel of Table 8a
+  (UNVERIFIED; its units are lost and were recomputed on VER).
 - The c6i produced: the D = 50 adaptation study (step7 to step9 and its
   sweeps, including the APSOLL patience-and-rearm sweep), the 8-seed synthetic
   sweep and 8-seed ladder, and the 2026-08 ladder widths (ind10 to ind30,
