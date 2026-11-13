@@ -1,6 +1,8 @@
 # environment-lock.txt -- pip freeze of ONE of the three environments that
 # produced the stored results: Amazon EC2 c7a.2xlarge, AMD EPYC 9R14, Ubuntu
 # 24.04.4 LTS, Python 3.12.3, venv ~/orpsoc-venv, captured on 2026-11-12.
+# The re-runs of 2026-11-12/13 (the ladder's RFE arm, ind5 LogReg and LightGBM,
+# swarm_fitness, nested_cv_stored) used exactly this environment.
 # COMPUTE_PROVENANCE.md lists which results come from this machine.
 #
 # The c6i.8xlarge environment (Ubuntu 24.04, Python 3.12.3) was not preserved;
