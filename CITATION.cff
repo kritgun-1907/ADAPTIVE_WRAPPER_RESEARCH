@@ -1,6 +1,7 @@
 cff-version: 1.2.0
-message: "If you use this code, please cite it as below. Zenodo DOI: to be added on release."
+message: "If you use this code, please cite it as below."
 type: software
+doi: 10.5281/zenodo.24365260
 title: "Code for: From Regime Shift to Redundancy: Boundary Conditions for Swarm-Based Feature Selection"
 version: v1.0.0
 license: MIT
