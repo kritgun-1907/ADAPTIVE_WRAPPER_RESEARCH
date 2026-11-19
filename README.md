@@ -488,7 +488,7 @@ Kritgun Singh, kritgunsingh.bt24ece@pec.edu.in
 
 ## Citation
 
-Zenodo DOI: to be added on release.
+Zenodo DOI: [10.5281/zenodo.24365260](https://doi.org/10.5281/zenodo.24365260)
 
 See also [`CITATION.cff`](CITATION.cff).
 
