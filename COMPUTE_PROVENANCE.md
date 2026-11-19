@@ -117,9 +117,9 @@ Other ladder files:
 | `tier_d_fullnovelty_8seed_20260814.json` | C6I | 2026-08-13/14 | Byte-identical to the c6i `ec2_results` `tier_d_fullnovelty.json`; on VER the all-features arm differs (3.8e-4). Not used in the paper: only `build_ladder.py` reads it, as a fallback, and the merged ladder takes 0 of its 586 records from it |
 | `tier_d_LinearSVM.json` (SHA-256 `0884c626b696de77a53cea6c4474f2edced46d33604e1574e9c5ddcab78debcf`) | C6I (ind10–ind17) and C7A (ind30) | 2026-08-18 to 08-26 | Byte-identical to the c7a bundle `orpsoc_out.tgz` (2026-08-26). A corroboration file: no script reads it, and all 80 records equal the merged ladder's LinearSVM records in every arm, RFE included. Its ind10–ind17 RFE therefore already held the values that the 2026-11-12 re-pin produced, while the ladder held different ones |
 | `arm_pairwise.json` | derived from the merged ladder | first committed 2026-10-09 | rebuilt byte-identical from the current ladder |
-| `collinearity.json` | derived (data statistics and the ladder's LogReg LASSO gain) | first committed 2026-10-09 | rebuilt byte-identical on VER before the ind5 re-run. Its data statistics come from the laptop copy: they reproduce exactly from it (ind5, ind10, ind12, ind17, ind38) and differ on the canonical copy by up to 5e-3, which does not change the table. Not rebuilt since (it needs the datasets): from the current ladder the ind5 gain is 0.0249406 against the stored 0.0249355, the same in `collinearity.tex` (+0.0249) |
+| `collinearity.json` | C7A, canonical copy (data statistics) and the ladder's LogReg LASSO gain | 2026-11-19 | Re-run on the c7a from `5fd1265` with the canonical copy and the current ladder. `collinearity.tex` is byte-identical to the previous version. Against the previous laptop-copy JSON, the industry statistics move by up to 5e-3 (data copy), the `sector_etf` and `fama_french` rows (laptop builds, the only ones) by at most 1e-11, and the ind5 gain is now 0.0249406 (was 0.0249355; +0.0249 in the table either way). The condition numbers differ by orders of magnitude (1e16 to 1e20) because the matrices are numerically singular; the table does not print them. The previous version is in the git history |
 | `nonfinancial_check.json` (madelon, golub) | C7A | 2026-08-25 | Byte-identical to the c7a bundle `orpsoc_out.tgz`; units `nonfinancial/64e74faa1d9e` dated 2026-08-25; c7a log `03_nonfinancial_20260825T150719`. The c7a 1.8.0 re-pin of its RFE and its mRMR and LASSO anchors is bit-identical in 80 of 80 records |
-| `golub_reconcile.json` (Section 3.7.1, Table S9) | UNKNOWN (consistent with MAC) | UNKNOWN; first committed 2026-10-09 | Not in any EC2 bundle or on the c7a. VER: all 8 stage-A LogReg rows bit-identical (inconclusive) |
+| `golub_reconcile.json` (Section 3.7.1, Table S9) | platform-insensitive (stored run UNKNOWN, consistent with MAC) | UNKNOWN; first committed 2026-10-09 | Not in any EC2 bundle. Re-runs give the stored bits on both platforms: all 32 stage-A rows on the c7a (2026-11-19, canonical `golub.pkl`) and all 4 stage-B rows on the c7a and VER (2026-11-12) are bit-identical to the stored file, so its platform does not matter |
 | θ sweep (`experiments/dimensionality/theta_sweep/results/theta_sweep_per_seed.csv`, Table S13) | C7A | 2026-11 (run recorded in its README as 2026-11-12) | package README; raw outputs and units come from the c7a |
 
 ### Penalty study (Table 9, Fig. 4, Table 12 fitness column, Fig. S10, Table S6)
@@ -162,8 +162,10 @@ Other ladder files:
   upgrade to scikit-learn 1.9.0. Only its RFE is affected, and every RFE
   value of that batch the paper uses was re-run under 1.8.0.
 - They also come from two downloads of the Ken French industry files. The
-  ladder at ind5 to ind48 and the penalty study are on the canonical copy
-  (2026-08-26), except Table S6 (ridge sweep), which is on the laptop copy.
+  ladder at ind5 to ind48, the penalty study and Table S5 are on the canonical
+  copy (2026-08-26), except Table S6 (ridge sweep), which is on the laptop
+  copy. A c7a timing probe on 2026-11-19 projected at least 30 h for an S6
+  re-run, over the release budget, so it was not re-run.
   The c6i's 2026-08 non-RFE arms predate that download; their all-features
   baselines reproduce from it to within the platform residual (about 1e-5 for
   LogReg). For ff49ind's raw data see `data/README.md`.
@@ -178,10 +180,12 @@ Other ladder files:
 - The c7a produced: madelon and golub, the 20-seed synthetic sweep, ind30
   LinearSVM, ind5 k-NN, the 2026-09 ladder widths (ind38, ind48, ff49ind), the
   θ sweep, and on 2026-11-12/13 the ladder's RFE arm, every arm of ind5 LogReg
-  and LightGBM, `swarm_fitness` and `nested_cv_stored`.
-- Platform UNKNOWN: `golub_reconcile.json` (used in Section 3.7.1 and Table
-  S9; consistent with Apple silicon), and `warm_gate.json` and
-  `tier_d_ksweep.json` (neither used in the paper). Probable but unverified
+  and LightGBM, `swarm_fitness` and `nested_cv_stored`; on 2026-11-19
+  `collinearity.json`.
+- Platform-insensitive: `golub_reconcile.json` (used in Section 3.7.1 and
+  Table S9) gives the stored bits on both the c7a and Apple silicon.
+- Platform UNKNOWN: `warm_gate.json` and `tier_d_ksweep.json` (neither used
+  in the paper). Probable but unverified
   c6i: `pareto_knee.json` (Section 3.2.1, Table S10) and the four detector
   files (Section 3.1.2, Fig. S2, Table S14).
 - For the adaptation study and the detectors, platform does not change the
