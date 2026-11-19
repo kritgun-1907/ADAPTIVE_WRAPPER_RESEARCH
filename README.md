@@ -91,7 +91,7 @@ Supplementary material:
 | Table S2, k-NN ladder | `tier_d_fullnovelty.py` | `tier_d_ladder_merged.json` | `ladder_tables.py` → `ladder_knn.tex` | regenerates |
 | Table S3, linear SVM ladder | `tier_d_fullnovelty.py` (`FN_MODELS=LinearSVM`) | `tier_d_ladder_merged.json` | — | verified from stored results, no generator. `tier_d_LinearSVM.json` (SHA-256 `0884c626b696de77a53cea6c4474f2edced46d33604e1574e9c5ddcab78debcf`) is a corroboration file that no script reads: the c7a copy of 2026-08-26, whose 80 records equal the merged ladder's LinearSVM records exactly, RFE included |
 | Table S4, synthetic sweep (LightGBM) | as Table 7 | as Table 7 | `ladder_tables.py` → `synthetic_sweep.tex` | regenerates |
-| Table S5, collinearity | `experiments/dimensionality/collinearity.py` | `collinearity.json` | `collinearity.py` → `collinearity.tex` | needs the datasets; not re-run for this release. The committed table matches the paper. Its data statistics (effective rank, VIF, condition number) were computed from the laptop data copy: they reproduce exactly from it and differ on the canonical copy by up to 5 × 10⁻³, which does not change the printed table. Its LASSO-gain column is read from the merged ladder: after the ind5 re-run, ind5's gain is 0.024941 against the stored 0.024935, the same at printed precision (+0.0249) |
+| Table S5, collinearity | `experiments/dimensionality/collinearity.py` | `collinearity.json` | `collinearity.py` → `collinearity.tex` | needs the datasets. Re-run for this release on the c7a with the canonical data copy and the current ladder; the printed table is unchanged and matches the paper. Against the earlier laptop-copy run, its data statistics (effective rank, VIF) moved by up to 5 × 10⁻³, and ind5's LASSO gain is now 0.024941 (was 0.024935; +0.0249 at printed precision) |
 | Table S6, ridge sweep | `experiments/penalty/ridge_sweep.py` | `ridge_sweep.json` | `analysis/ridge_tables.py` → `ridge_sweep.tex` | regenerates. Computed on Apple silicon with the laptop data copy and not re-run on the canonical copy; the rest of the penalty study was |
 | Table S7, pre/straddle/post AUC | `tier_a.py`, `step8_results.py` | `tier_a.json`, `step8_statistical_summary.json` | — | verified from stored results, no generator |
 | Table S8, the two golub pipelines | — | — | `tables/golub_pipelines.tex` | written by hand |
@@ -272,8 +272,8 @@ SVM, RFE, p = 171: +0.0059 to −0.0392\*). The values they replace are kept:
 300 re-pinned records, and the previous ind5, `swarm_fitness.json` and
 `nested_cv_stored.json` are in the git history (commit `bb8e31a`).
 
-Still on the laptop copy: the ridge sweep (Table S6), which was not re-run,
-the data statistics of Table S5 (same at printed precision on either copy), and
+Still on the laptop copy: the ridge sweep (Table S6), which was not re-run (a
+c7a timing probe projected at least 30 hours, over the release budget), and
 `nested_cv_c.json` (not in the paper). The market datasets (sector ETFs,
 Fama–French factors, bonds, commodities, `v2_regime_switch`) exist only as
 laptop builds; the c7a check reruns of `pareto_knee` (Table S10) and
@@ -294,9 +294,10 @@ of Apple silicon and the c7a differ by at most about 4 × 10⁻⁴. RFE is the
 exception; see
 [Known reproducibility limitation: RFE](#known-reproducibility-limitation-rfe).
 
-The platform could not be determined for `golub_reconcile.json` (Section
-3.7.1, Table S9), `warm_gate.json` or `tier_d_ksweep.json`; the last two are
-not used in the paper. `pareto_knee.json` (Section 3.2.1, Table S10) and the
+`golub_reconcile.json` (Section 3.7.1, Table S9) gives the stored bits on both
+Apple silicon and the c7a, so its platform does not matter. The platform could
+not be determined for `warm_gate.json` or `tier_d_ksweep.json`, neither of
+which is used in the paper. `pareto_knee.json` (Section 3.2.1, Table S10) and the
 four detector files are probably from the c6i, but this is unverified.
 `compass_ceiling.json` is the Apple-silicon version. A c6i rerun differs only
 in its sector-ETF blocks (cause UNKNOWN: platform or raw-data copy). The
